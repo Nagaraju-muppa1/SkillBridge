@@ -1,0 +1,58 @@
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.sidebar {
+  width: 220px;
+  background-color: #2e3b55;
+  color: white;
+  padding: 1rem;
+}
+
+.sidebar h2 {
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin: 1rem 0;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sidebar li:hover {
+  color: #ffb400;
+}
+
+.main-content {
+  flex: 1;
+  background-color: #f4f6f8;
+  padding: 2rem;
+}
+
+.dashboard-header h1 {
+  margin-bottom: 0.5rem;
+}
+
+.cards {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  text-align: center;
+}

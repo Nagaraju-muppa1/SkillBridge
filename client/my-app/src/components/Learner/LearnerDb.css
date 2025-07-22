@@ -1,0 +1,57 @@
+.learner-dashboard-container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.learner-sidebar {
+  width: 220px;
+  background-color: #1e2d44;
+  color: white;
+  padding: 1rem;
+}
+
+.learner-sidebar h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.learner-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.learner-sidebar li {
+  margin: 1rem 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.learner-sidebar li:hover {
+  color: #00c2cb;
+}
+
+.learner-main-content {
+  flex: 1;
+  background-color: #f4f6f8;
+  padding: 2rem;
+}
+
+.learner-header h1 {
+  margin-bottom: 0.5rem;
+}
+
+.learner-cards {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.learner-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  flex: 1;
+  text-align: center;
+}
