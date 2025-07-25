@@ -1,0 +1,16 @@
+body {
+  margin: 0;
+  /* Ensure scroll-behavior: smooth; is here for smooth navigation */
+  scroll-behavior: smooth;
+}
+
+/* This is the ABSOLUTE KEY for CSS parallax */
+#root, .App {
+  height: 100vh; /* Make the root container fill the viewport */
+  overflow-y: scroll; /* Enable scrolling for the root container */
+  perspective: 1px; /* <-- THIS IS CRITICAL: Creates the 3D rendering context */
+  perspective-origin: center center; /* Sets the vanishing point */
+  overflow-x: hidden; /* Prevents horizontal scroll */
+}
+
+/* Keep any other global styles you might have */
