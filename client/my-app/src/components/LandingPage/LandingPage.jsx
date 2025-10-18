@@ -1,7 +1,23 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  ClerkLoaded,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  useClerk,
+  UserButton
+} from "@clerk/clerk-react";
 // Removed direct import of * as THREE, will use window.THREE after CDN load
 
 function LandingPage() {
+    const { signOut } = useClerk();
+
+  const handleSignOut = async () => {
+    await signOut();
+    window.location.href = "/"; // redirect manually after sign out
+  };
   // State to track if external libraries (GSAP, ScrollTrigger, Three.js) are loaded
   const [libsLoaded, setLibsLoaded] = useState(false);
   // State for the new Skill Insight Generator feature
@@ -46,8 +62,8 @@ function LandingPage() {
       }
     };
 
-    loadScript("https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js", "gsap-cdn", onScriptLoad);
-    loadScript("https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js", "scrolltrigger-cdn", onScriptLoad);
+    // loadScript("https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js", "gsap-cdn", onScriptLoad);
+    // loadScript("https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js", "scrolltrigger-cdn", onScriptLoad);
     loadScript("https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js", "three-cdn", onScriptLoad);
 
     // Cleanup function (optional, but good practice for dynamically added scripts)
@@ -58,127 +74,241 @@ function LandingPage() {
   }, []); // Run once on component mount
 
   // Effect for GSAP animations, dependent on libsLoaded
-  useEffect(() => {
-    if (!libsLoaded) {
-      return;
+  // useEffect(() => {
+  //   if (!libsLoaded) {
+  //     return;
+  //   }
+
+  //   // Register ScrollTrigger plugin
+  //   window.gsap.registerPlugin(window.ScrollTrigger);
+  //   window.ScrollTrigger.refresh(); // Refresh on mount to ensure accurate calculations
+
+  //   // --- Hero Section Animations ---
+  //   // Fade in hero title and tagline
+  //   window.gsap.fromTo([heroTitleRef.current, heroTaglineRef.current],
+  //     { opacity: 0, y: 50 },
+  //     { opacity: 1, y: 0, duration: 1.5, stagger: 0.3, ease: "power3.out" }
+  //   );
+
+  //   // On scroll effect for hero content (fades out and scales down)
+  //   if (heroContentRef.current) {
+  //     window.gsap.to(heroContentRef.current, {
+  //       opacity: 0,
+  //       scale: 0.8,
+  //       y: -100, // Move up slightly as it fades out
+  //       ease: "power1.in",
+  //       scrollTrigger: {
+  //         trigger: heroSectionRef.current,
+  //         start: "top top", // Start when hero section hits top
+  //         end: "center top", // End when center of hero section hits top
+  //         scrub: true, // Link animation to scroll position
+  //       },
+  //     });
+  //   }
+
+  //   // --- Section Scroll-in Animations (with zoom) ---
+  //   const setupSectionAnimation = (sectionRef) => {
+  //     if (sectionRef.current) {
+  //       window.gsap.fromTo(sectionRef.current.children,
+  //         { opacity: 0, y: 50, scale: 0.9 }, // Added scale: 0.9 for zoom-in effect
+  //         {
+  //           opacity: 1,
+  //           y: 0,
+  //           scale: 1, // Scales to original size
+  //           duration: 1,
+  //           stagger: 0.2,
+  //           ease: "power2.out",
+  //           scrollTrigger: {
+  //             trigger: sectionRef.current,
+  //             start: "top 85%", // Start animation earlier for smoother transition
+  //             toggleActions: "play none none reverse",
+  //           },
+  //         }
+  //       );
+  //     }
+  //   };
+
+  //   setupSectionAnimation(introSectionRef);
+  //   setupSectionAnimation(howItWorksSectionRef);
+  //   setupSectionAnimation(visionSectionRef);
+  //   setupSectionAnimation(getStartedSectionRef);
+
+  //   // --- How It Works Steps Animation ---
+  //   if (howItWorksSectionRef.current) {
+  //     const stepCircles = Array.from(howItWorksSectionRef.current.querySelectorAll('.how-it-works-steps .step-circle'));
+  //     const stepLines = Array.from(howItWorksSectionRef.current.querySelectorAll('.how-it-works-steps .step-line'));
+
+  //     window.gsap.timeline({
+  //       scrollTrigger: {
+  //         trigger: howItWorksSectionRef.current.querySelector('.how-it-works-steps'),
+  //         start: 'top 80%',
+  //         toggleActions: 'play none none reverse',
+  //       }
+  //     })
+  //     .from(stepCircles, {
+  //       opacity: 0,
+  //       scale: 0.5,
+  //       duration: 0.8,
+  //       stagger: 0.3,
+  //       ease: 'back.out(1.7)'
+  //     })
+  //     .from(stepLines, {
+  //       scaleX: 0,
+  //       opacity: 0,
+  //       duration: 0.6,
+  //       stagger: 0.3,
+  //       ease: 'power2.out',
+  //       transformOrigin: 'left center',
+  //     }, "<0.2");
+  //   }
+
+  //   // --- Abstract Network Graphic Animation in Our Vision ---
+  //   if (visionSectionRef.current) {
+  //     const networkNodes = Array.from(visionSectionRef.current.querySelectorAll('.network-node'));
+  //     const networkLines = Array.from(visionSectionRef.current.querySelectorAll('.network-line'));
+
+  //     window.gsap.from(networkNodes, {
+  //       opacity: 0,
+  //       scale: 0.5,
+  //       stagger: 0.1,
+  //       duration: 0.8,
+  //       ease: "back.out(1.7)",
+  //       scrollTrigger: {
+  //         trigger: visionSectionRef.current,
+  //         start: "top 70%",
+  //         toggleActions: "play none none reverse",
+  //       }
+  //     });
+
+  //     window.gsap.from(networkLines, {
+  //       strokeDashoffset: 100, // Assuming stroke-dasharray is 100
+  //       opacity: 0,
+  //       stagger: 0.1,
+  //       duration: 1.5,
+  //       ease: "power2.out",
+  //       scrollTrigger: {
+  //         trigger: visionSectionRef.current,
+  //         start: "top 65%",
+  //         toggleActions: "play none none reverse",
+  //       }
+  //     });
+  //   }
+
+  // }, [libsLoaded]); // Rerun GSAP animations when libraries are confirmed loaded
+  gsap.registerPlugin(ScrollTrigger);
+
+useEffect(() => {
+  if (!libsLoaded) return;
+
+  ScrollTrigger.refresh(); // Refresh to ensure accurate calculations
+
+  // --- Hero Section Animations ---
+  gsap.fromTo([heroTitleRef.current, heroTaglineRef.current],
+    { opacity: 0, y: 50 },
+    { opacity: 1, y: 0, duration: 1.5, stagger: 0.3, ease: "power3.out" }
+  );
+
+  if (heroContentRef.current) {
+    gsap.to(heroContentRef.current, {
+      opacity: 0,
+      scale: 0.8,
+      y: -100,
+      ease: "power1.in",
+      scrollTrigger: {
+        trigger: heroSectionRef.current,
+        start: "top top",
+        end: "center top",
+        scrub: true,
+      },
+    });
+  }
+
+  const setupSectionAnimation = (sectionRef) => {
+    if (sectionRef.current) {
+      gsap.fromTo(sectionRef.current.children,
+        { opacity: 0, y: 50, scale: 0.9 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1,
+          stagger: 0.2,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
     }
+  };
 
-    // Register ScrollTrigger plugin
-    window.gsap.registerPlugin(window.ScrollTrigger);
-    window.ScrollTrigger.refresh(); // Refresh on mount to ensure accurate calculations
+  setupSectionAnimation(introSectionRef);
+  setupSectionAnimation(howItWorksSectionRef);
+  setupSectionAnimation(visionSectionRef);
+  setupSectionAnimation(getStartedSectionRef);
 
-    // --- Hero Section Animations ---
-    // Fade in hero title and tagline
-    window.gsap.fromTo([heroTitleRef.current, heroTaglineRef.current],
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 1.5, stagger: 0.3, ease: "power3.out" }
-    );
+  if (howItWorksSectionRef.current) {
+    const stepCircles = Array.from(howItWorksSectionRef.current.querySelectorAll('.how-it-works-steps .step-circle'));
+    const stepLines = Array.from(howItWorksSectionRef.current.querySelectorAll('.how-it-works-steps .step-line'));
 
-    // On scroll effect for hero content (fades out and scales down)
-    if (heroContentRef.current) {
-      window.gsap.to(heroContentRef.current, {
-        opacity: 0,
-        scale: 0.8,
-        y: -100, // Move up slightly as it fades out
-        ease: "power1.in",
-        scrollTrigger: {
-          trigger: heroSectionRef.current,
-          start: "top top", // Start when hero section hits top
-          end: "center top", // End when center of hero section hits top
-          scrub: true, // Link animation to scroll position
-        },
-      });
-    }
-
-    // --- Section Scroll-in Animations (with zoom) ---
-    const setupSectionAnimation = (sectionRef) => {
-      if (sectionRef.current) {
-        window.gsap.fromTo(sectionRef.current.children,
-          { opacity: 0, y: 50, scale: 0.9 }, // Added scale: 0.9 for zoom-in effect
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1, // Scales to original size
-            duration: 1,
-            stagger: 0.2,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 85%", // Start animation earlier for smoother transition
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: howItWorksSectionRef.current.querySelector('.how-it-works-steps'),
+        start: 'top 80%',
+        toggleActions: 'play none none reverse',
       }
-    };
+    })
+    .from(stepCircles, {
+      opacity: 0,
+      scale: 0.5,
+      duration: 0.8,
+      stagger: 0.3,
+      ease: 'back.out(1.7)'
+    })
+    .from(stepLines, {
+      scaleX: 0,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.3,
+      ease: 'power2.out',
+      transformOrigin: 'left center',
+    }, "<0.2");
+  }
 
-    setupSectionAnimation(introSectionRef);
-    setupSectionAnimation(howItWorksSectionRef);
-    setupSectionAnimation(visionSectionRef);
-    setupSectionAnimation(getStartedSectionRef);
+  if (visionSectionRef.current) {
+    const networkNodes = Array.from(visionSectionRef.current.querySelectorAll('.network-node'));
+    const networkLines = Array.from(visionSectionRef.current.querySelectorAll('.network-line'));
 
-    // --- How It Works Steps Animation ---
-    if (howItWorksSectionRef.current) {
-      const stepCircles = Array.from(howItWorksSectionRef.current.querySelectorAll('.how-it-works-steps .step-circle'));
-      const stepLines = Array.from(howItWorksSectionRef.current.querySelectorAll('.how-it-works-steps .step-line'));
+    gsap.from(networkNodes, {
+      opacity: 0,
+      scale: 0.5,
+      stagger: 0.1,
+      duration: 0.8,
+      ease: "back.out(1.7)",
+      scrollTrigger: {
+        trigger: visionSectionRef.current,
+        start: "top 70%",
+        toggleActions: "play none none reverse",
+      }
+    });
 
-      window.gsap.timeline({
-        scrollTrigger: {
-          trigger: howItWorksSectionRef.current.querySelector('.how-it-works-steps'),
-          start: 'top 80%',
-          toggleActions: 'play none none reverse',
-        }
-      })
-      .from(stepCircles, {
-        opacity: 0,
-        scale: 0.5,
-        duration: 0.8,
-        stagger: 0.3,
-        ease: 'back.out(1.7)'
-      })
-      .from(stepLines, {
-        scaleX: 0,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.3,
-        ease: 'power2.out',
-        transformOrigin: 'left center',
-      }, "<0.2");
-    }
+    gsap.from(networkLines, {
+      strokeDashoffset: 100,
+      opacity: 0,
+      stagger: 0.1,
+      duration: 1.5,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: visionSectionRef.current,
+        start: "top 65%",
+        toggleActions: "play none none reverse",
+      }
+    });
+  }
 
-    // --- Abstract Network Graphic Animation in Our Vision ---
-    if (visionSectionRef.current) {
-      const networkNodes = Array.from(visionSectionRef.current.querySelectorAll('.network-node'));
-      const networkLines = Array.from(visionSectionRef.current.querySelectorAll('.network-line'));
-
-      window.gsap.from(networkNodes, {
-        opacity: 0,
-        scale: 0.5,
-        stagger: 0.1,
-        duration: 0.8,
-        ease: "back.out(1.7)",
-        scrollTrigger: {
-          trigger: visionSectionRef.current,
-          start: "top 70%",
-          toggleActions: "play none none reverse",
-        }
-      });
-
-      window.gsap.from(networkLines, {
-        strokeDashoffset: 100, // Assuming stroke-dasharray is 100
-        opacity: 0,
-        stagger: 0.1,
-        duration: 1.5,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: visionSectionRef.current,
-          start: "top 65%",
-          toggleActions: "play none none reverse",
-        }
-      });
-    }
-
-  }, [libsLoaded]); // Rerun GSAP animations when libraries are confirmed loaded
+}, [libsLoaded]);
 
   // Universe Background Component (using Three.js)
   const UniverseBackground = () => {
@@ -841,17 +971,36 @@ function LandingPage() {
         {/* --- Universe Background (Three.js) --- */}
         <UniverseBackground />
 
-        {/* --- Navigation Bar --- */}
-        <header className="navbar-placeholder">
-          <div className="logo">SkillBridge</div>
-          <nav className="nav-links">
-            <a href="#introduction">About</a>
-            <a href="#how-it-works">How It Works</a>
-            <a href="#vision">Vision</a>
-            <a href="#contact">Contact</a>
-          </nav>
-          <button className="nav-login-btn">Login / Register</button>
-        </header>
+<header className="navbar-placeholder">
+      <div className="logo">SkillBridge</div>
+      <nav className="nav-links">
+        <a href="#introduction">About</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#vision">Vision</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <ClerkLoaded>
+        <SignedIn>
+          <UserButton
+            appearance={{
+              elements: {
+                userButtonPopoverActionButton: {
+                  onClick: handleSignOut,
+                },
+              },
+            }}
+          />
+        </SignedIn>
+
+        <SignedOut>
+          <SignInButton mode="modal">
+            <button className="nav-login-btn">Login / Register</button>
+          </SignInButton>
+        </SignedOut>
+      </ClerkLoaded>
+    </header>
+
 
         {/* --- Hero Section: Dynamic Background & Core Message --- */}
         <section className="hero-section" ref={heroSectionRef}>
