@@ -43,36 +43,37 @@ function LandingPage() {
 
   // This effect runs once the libraries are loaded and sets up the animation
   useEffect(() => {
-    if (!libsLoaded || !howItWorksSectionRef.current) return;
-
-    window.gsap.registerPlugin(window.ScrollTrigger);
-
-    const stepCircles = Array.from(howItWorksSectionRef.current.querySelectorAll('.step-circle'));
-    const stepLines = Array.from(howItWorksSectionRef.current.querySelectorAll('.step-line'));
-
-    // Create the animation timeline
-    window.gsap.timeline({
-      scrollTrigger: {
-        trigger: howItWorksSectionRef.current,
-        start: 'top 80%', // Start when the top of the section is 80% down the viewport
-      }
-    })
-    .from(stepCircles, { opacity: 0, scale: 0.5, duration: 0.8, stagger: 0.3, ease: 'back.out(1.7)' })
-    .from(stepLines, { scaleX: 0, opacity: 0, duration: 0.6, stagger: 0.3, ease: 'power2.out', transformOrigin: 'left center' }, "<0.2");
+    // Wait for the libsLoaded state to be true
+    if (!libsLoaded) return;
 
     // ✅ THIS IS THE FIX
-    // This function will run once the ENTIRE page (including images, fonts) is loaded
-    const refreshOnLoad = () => {
-        console.log("Page fully loaded. Refreshing ScrollTrigger positions.");
+    // Create a function that sets up the animations
+    const setupAnimations = () => {
+        // Now it's safe to assume window.gsap exists
+        window.gsap.registerPlugin(window.ScrollTrigger);
+
+        const stepCircles = Array.from(howItWorksSectionRef.current.querySelectorAll('.step-circle'));
+        const stepLines = Array.from(howItWorksSectionRef.current.querySelectorAll('.step-line'));
+
+        window.gsap.timeline({
+          scrollTrigger: {
+            trigger: howItWorksSectionRef.current,
+            start: 'top 80%',
+          }
+        })
+        .from(stepCircles, { opacity: 0, scale: 0.5, duration: 0.8, stagger: 0.3, ease: 'back.out(1.7)' })
+        .from(stepLines, { scaleX: 0, opacity: 0, duration: 0.6, stagger: 0.3, ease: 'power2.out', transformOrigin: 'left center' }, "<0.2");
+
+        // After setting up, refresh ScrollTrigger to get correct positions
         window.ScrollTrigger.refresh();
     };
     
-    // Listen for the window's 'load' event
-    window.addEventListener('load', refreshOnLoad);
+    // Listen for the window's 'load' event, which fires after ALL content is ready
+    window.addEventListener('load', setupAnimations);
 
     // Cleanup the listener when the component unmounts
     return () => {
-        window.removeEventListener('load', refreshOnLoad);
+        window.removeEventListener('load', setupAnimations);
     };
 
   }, [libsLoaded]);
