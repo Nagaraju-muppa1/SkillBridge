@@ -1,0 +1,355 @@
+/* --- Global Resets & Base --- */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&family=Inter:wght@300;400;700&display=swap');
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: transparent; 
+  color: #e0e0e0;
+  line-height: 1.6;
+}
+
+.landing-page-container {
+  overflow-x: hidden;
+  position: relative;
+  background-color: #0d0d1a; 
+  isolation: isolate; 
+}
+
+.universe-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1; 
+}
+
+/* --- Navigation Bar --- */
+.navbar-placeholder {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 5%;
+  background: rgba(13, 13, 26, 0.05);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+}
+
+/* --- Section Base Styling --- */
+section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 5%;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+section:first-of-type {
+  padding-top: calc(100px + 70px);
+  margin-top: -70px;
+}
+
+/* --- Forceful Override for Transparency --- */
+.hero-section,
+.introduction-section,
+.how-it-works-section,
+.vision-section,
+.get-started-cta,
+.footer-section,
+.skill-insight-container,
+.vision-graphic-container {
+    background: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* --- Hero Section Specific Styling --- */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.3));
+  z-index: 2;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* --- Text and Other Element Styles --- */
+h1, h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3.5rem; /* Reduced from 4rem */
+  margin-bottom: 25px;
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+.hero-content h1 {
+  font-size: 4.5rem;
+  line-height: 1.1;
+}
+
+p {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  max-width: 900px;
+  margin: 0 auto 40px auto;
+  color: #c0c0c0;
+}
+
+.hero-content p {
+  font-size: 1.4rem;
+  max-width: 700px;
+}
+
+.logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #00e676;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(0,230,118,0.7);
+}
+
+.nav-links a {
+  font-family: 'Rajdhani', sans-serif;
+  color: #e0e0e0;
+  text-decoration: none;
+  margin-left: 35px;
+  font-size: 1.1rem;
+  transition: color 0.3s ease, transform 0.2s ease;
+  position: relative;
+  font-weight: 600;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: #00e676;
+  left: 50%;
+  bottom: -5px;
+  transform: translateX(-50%);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #00c853;
+  transform: translateY(-3px);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-login-btn, .get-started-btn {
+  font-family: 'Rajdhani', sans-serif;
+  background-color: #00e676;
+  color: #0d0d1a;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 8px 25px rgba(0, 230, 118, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.nav-login-btn:hover, .get-started-btn:hover {
+  background-color: #00c853;
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(0, 230, 118, 0.9);
+}
+
+.skill-insight-container input {
+  width: calc(100% - 120px);
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,230,118,0.3);
+  background-color: rgba(255,255,255,0.05);
+  color: #e0e0e0;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.skill-insight-container input:focus {
+  border-color: #00e676;
+  box-shadow: 0 0 10px rgba(0,230,118,0.5);
+}
+
+.skill-insight-container button {
+  width: 110px;
+  padding: 12px 0;
+  margin-left: 10px;
+  background-color: #00e676;
+  color: #0d0d1a;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.how-it-works-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  width: 90%;
+  max-width: 1000px;
+}
+
+.step-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #00e676;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0d0d1a;
+  font-weight: bold;
+  font-size: 2rem;
+  box-shadow: 0 0 30px rgba(0, 230, 118, 0.8);
+  z-index: 2;
+  border: 3px solid rgba(255,255,255,0.3);
+}
+
+.step-line {
+  flex-grow: 1;
+  height: 5px;
+  background: linear-gradient(to right, #00e676, #66b3ff);
+  margin: 0 -15px;
+  z-index: 1;
+}
+
+.vision-graphic-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px; /* Increased from 800px */
+  height: 500px;   /* Increased from 400px */
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px; /* Made border more visible */
+  /* Added a subtle background and a glowing border */
+  background: rgba(10, 10, 26, 0.2);
+  border: 1px solid rgba(0, 230, 118, 0.2);
+  box-shadow: 0 0 30px rgba(0, 230, 118, 0.1);
+}
+.vision-graphic-container svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.vision-line {
+  stroke: url(#lineGradient);
+  stroke-width: 3;
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: drawLine 6s infinite ease-in-out alternate;
+  filter: drop-shadow(0 0 8px rgba(0,230,118,0.8));
+}
+
+.vision-node {
+  fill: #00e676;
+  filter: drop-shadow(0 0 10px rgba(0,230,118,1));
+  animation: nodePulse 3s infinite alternate ease-in-out;
+}
+
+@keyframes drawLine {
+  from { stroke-dashoffset: 200; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes nodePulse {
+  0% { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(1.1); opacity: 1; }
+}
+
+.get-started-btn {
+  animation: pulseGlow 2s infinite alternate ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 20px rgba(0, 230, 118, 0.6), 0 0 30px rgba(0, 230, 118, 0.4); }
+  100% { box-shadow: 0 0 35px rgba(0, 230, 118, 0.9), 0 0 50px rgba(0, 230, 118, 0.6); }
+}
+
+/* --- ✅ RESTORED: Responsive Adjustments --- ✅ */
+@media (max-width: 768px) {
+  h1, h2 {
+    font-size: 3rem;
+  }
+  .hero-content h1 {
+    font-size: 3.5rem;
+  }
+  p {
+    font-size: 1.1rem;
+  }
+  .hero-content p {
+    font-size: 1.3rem;
+  }
+  .navbar-placeholder {
+    flex-direction: column;
+    padding: 10px 5%;
+  }
+  .nav-links {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .nav-links a {
+    margin: 5px 10px;
+    font-size: 0.9rem;
+  }
+  .nav-login-btn {
+    margin-top: 20px;
+    width: 80%;
+  }
+  .how-it-works-steps {
+    flex-direction: column;
+    width: 100%;
+  }
+  .step-line {
+    width: 5px;
+    height: 60px;
+    background: linear-gradient(to bottom, #00e676, #66b3ff);
+    margin: 10px 0;
+  }
+  .step-circle {
+    width: 70px;
+    height: 70px;
+    font-size: 1.8rem;
+  }
+  .vision-graphic-container {
+    width: 90%;
+    height: 300px;
+  }
+}
