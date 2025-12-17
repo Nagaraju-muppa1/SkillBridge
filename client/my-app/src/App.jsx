@@ -17,15 +17,29 @@ import DashboardRouter from './pages/DashboardRouter';
  * - If you're signed in, it shows the page (the <Outlet />).
  * - If you're NOT signed in, it redirects you to "/sign-in".
  */
+// src/App.jsx (MODIFIED ProtectedLayout)
+
+// ... imports ...
+
 function ProtectedLayout() {
   const { isLoaded, isSignedIn } = useUser();
 
-  if (!isLoaded) {
-    return <div>Loading...</div>; // Or a loading spinner
+  // 1. If Clerk is NOT loaded, show a loading state (WAIT)
+  if (!isLoaded) return <div>Loading Auth...</div>;
+
+  // 2. STOPS THE FLASHING: 
+  // If we are currently in a Clerk factor-check, do NOT redirect to home.
+  
+  // 2. If Clerk IS loaded and the user IS signed in, proceed to the page
+  if (isSignedIn) {
+    return <Outlet />; 
   }
 
-  return isSignedIn ? <Outlet /> : <Navigate to="/sign-in" replace />;
+  // 3. If Clerk IS loaded and the user IS NOT signed in, THEN redirect
+  return <Navigate to="/sign-in" replace />;
 }
+
+// ... rest of App.jsx ...
 
 function App() {
   return (
@@ -34,8 +48,8 @@ function App() {
       {/* These pages are for signed-out users.
         The logic to redirect logged-in users away is inside the components themselves.
       */}
-      <Route path="/sign-in" element={<SignInPage />} />
-      <Route path="/sign-up" element={<SignUpPage />} />
+      <Route path="/sign-in/*" element={<SignInPage />} />
+      <Route path="/sign-up/*" element={<SignUpPage />} />
 
       {/* --- Public Route --- */}
       {/* Anyone can see the landing page, logged in or not */}

@@ -50,6 +50,7 @@ export default function ProfessionalOnboardingForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           clerkUserId: user.id,
+          email: user.primaryEmailAddress?.emailAddress,
           role: 'professional',
           ...formData,
           experience: parseInt(formData.experience) || 0,
