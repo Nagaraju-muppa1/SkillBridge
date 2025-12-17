@@ -25,7 +25,9 @@ function ClerkProviderWithNavigate() {
     <ClerkProvider
       publishableKey={PUBLISHABLE_KEY}
       navigate={(to) => navigate(to)}
+      
     >
+      
       <App />
     </ClerkProvider>
   );

@@ -2,6 +2,7 @@
 import { SignIn, useUser } from "@clerk/clerk-react";
 import { Navigate } from "react-router-dom"; 
 
+
 export default function SignInPage() {
   const { isSignedIn, isLoaded } = useUser();
 
@@ -15,9 +16,9 @@ export default function SignInPage() {
   }
 
   // If the user is already signed in, redirect them to the dashboard.
-  if (isSignedIn) {
-    return <Navigate to="/dashboard" replace />;
-  }
+  //if (isSignedIn) {
+   // return <Navigate to="/dashboard" replace />;
+ // }
 
   // If they are signed out, show the centered Sign-In form
   return (
@@ -27,8 +28,9 @@ export default function SignInPage() {
         path="/sign-in"
         signUpUrl="/sign-up"
         
+        forceRedirectUrl="/dashboard"
         // This is the correct, non-deprecated prop:
-        signInFallbackRedirectUrl="/dashboard"
+       //signInFallbackRedirectUrl="/dashboard"
       />
     </div>
   );
