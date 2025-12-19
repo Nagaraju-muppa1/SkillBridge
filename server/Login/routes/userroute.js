@@ -12,9 +12,10 @@ const { saveProfile,profileSetups,profileEdit,getDetails } = require('../control
 // METHOD: POST
 // PATH: /user-service/profile
 // FUNCTION: saveProfile
+
 route.post('/user-service/profile', saveProfile);
 route.post('/userdetails',getDetails)
 route.post('/profile-setup',profileSetups);
 route.put('/profile-updating/:id',profileEdit)
 
-module.exports = route;
+module.exports = route; 

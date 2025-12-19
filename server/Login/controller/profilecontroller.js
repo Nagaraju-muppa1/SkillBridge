@@ -20,6 +20,7 @@ const saveProfile = async (req, res) => {
   }
 };
 const getDetails = async(req,res)=>{
+  console.log("getdetails");
   try{
     const {email,password}=req.body;
     const found = await userModel.findOne({email:email});
