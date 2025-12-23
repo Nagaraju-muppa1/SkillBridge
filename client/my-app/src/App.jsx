@@ -11,6 +11,7 @@ import RoleSelectionPage from './pages/RoleSelectionPage';
 import LearnerOnboardingForm from './pages/LearnerOnboardingForm';
 import ProfessionalOnboardingForm from './pages/ProfessionalOnboardingForm';
 import DashboardRouter from './pages/DashboardRouter';
+import Professionaldashboard from './components/Profesional/Professionaldashboard';
 
 /**
  * This component protects routes that ONLY signed-in users can see.
@@ -53,7 +54,7 @@ function App() {
 
       {/* --- Public Route --- */}
       {/* Anyone can see the landing page, logged in or not */}
-      <Route path="/" element={<LandingPage />} />
+      <Route path="/" element={<LandingPage/>} />
 
       {/* --- Protected Routes --- */}
       {/* All routes inside here require you to be signed in. */}
@@ -62,6 +63,7 @@ function App() {
         <Route path="/onboarding/learner" element={<LearnerOnboardingForm />} />
         <Route path="/onboarding/professional" element={<ProfessionalOnboardingForm />} />
         <Route path="/dashboard" element={<DashboardRouter />} />
+        <Route path="/professionaldashboard" element={<Professionaldashboard/>}/>
         {/* Add any other protected routes here */}
       </Route>
 
