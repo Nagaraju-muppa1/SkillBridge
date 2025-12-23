@@ -37,7 +37,6 @@ app.get('/', (req, res) => {
   res.send("It's working fine!");
 });
 
-/* ✅ FIX: REMOVE /api/v1/user PREFIX */
 app.use('/', route);
 
 app.listen(port, () => {
