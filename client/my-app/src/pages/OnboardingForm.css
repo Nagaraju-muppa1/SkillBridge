@@ -1,100 +1,138 @@
-/* Main container for the whole page */
+/* Page background */
 .onboarding-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
-  background: #0d0d1a;
-  color: white;
-  padding: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  box-sizing: border-box;
+  background: #f4f6fb;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* The form card itself */
+/* Main form */
 .onboarding-form {
+  background: #ffffff;
   width: 100%;
-  max-width: 500px;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 2rem 2.5rem;
+  max-width: 700px;
+  padding: 30px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* The title (H2) */
+/* Form heading */
 .onboarding-form h2 {
   text-align: center;
-  margin-bottom: 30px;
-  font-weight: 600;
-  color: #eee;
+  margin-bottom: 25px;
+  color: #1f2937;
 }
 
-/* Common style for all inputs and select dropdowns */
-.onboarding-input {
-  width: 100%;
-  padding: 12px 14px;
-  margin-bottom: 18px;
-  border-radius: 8px;
-  border: 1px solid #444;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  box-sizing: border-box; /* Ensures padding doesn't affect width */
-  font-size: 1rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+/* Each section box */
+.onboarding-form > div {
+  background: #f9fafb;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
 }
 
-/* Style for placeholder text */
-.onboarding-input::placeholder {
-  color: #aaa;
-}
-
-/* Style when the input is focused */
-.onboarding-input:focus {
-  outline: none;
-  border-color: #6a6afb; /* A nice accent color */
-  box-shadow: 0 0 0 3px rgba(106, 106, 251, 0.3);
-}
-
-/* Makes <option> tags in the dropdown readable on a dark background */
-.onboarding-input option {
-  background: #1a1a2e; /* A slightly lighter dark */
-  color: white;
-}
-
-/* The error message paragraph */
-.onboarding-error {
-  color: #ff4d4d;
-  text-align: center;
+/* Section titles */
+.onboarding-form h4 {
   margin-bottom: 15px;
-  font-size: 0.9rem;
+  color: #374151;
+  border-left: 4px solid #4f46e5;
+  padding-left: 10px;
+}
+
+.onboarding-form h6 {
+  margin: 10px 0;
+  color: #4b5563;
+}
+
+/* Labels */
+.onboarding-form label {
+  display: block;
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+/* Inputs & Select */
+.onboarding-input,
+.onboarding-form input[type="text"],
+.onboarding-form input[type="number"],
+.onboarding-form select {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  outline: none;
+}
+
+.onboarding-input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+/* Radio & Checkbox groups */
+.onboarding-form input[type="radio"],
+.onboarding-form input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.onboarding-form label input[type="radio"],
+.onboarding-form label input[type="checkbox"] {
+  display: inline-block;
+  width: auto;
+}
+
+/* Mode & days layout */
+.onboarding-form p {
+  margin: 10px 0 6px;
   font-weight: 500;
 }
 
-/* This styles the button that already has className="get-started-btn".
-  I've added hover and disabled states. 
-*/
+.onboarding-form label {
+  cursor: pointer;
+}
+
+/* Available days grid */
+.onboarding-form div:nth-child(3) label {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 15px;
+  margin-bottom: 8px;
+}
+
+/* Error message */
+.onboarding-error {
+  color: #dc2626;
+  background: #fee2e2;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* Submit button */
 .get-started-btn {
-  width: 100%;
+  width: 50%;
   padding: 12px;
-  background: linear-gradient(90deg, #6a6afb, #a16afd);
+  background: #4f46e5;
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: bold;
+  font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease;
 }
 
 .get-started-btn:hover {
-  opacity: 0.9;
-  box-shadow: 0 4px 15px rgba(106, 106, 251, 0.4);
+  background: #4338ca;
 }
 
 .get-started-btn:disabled {
-  background: #555;
+  background: #9ca3af;
   cursor: not-allowed;
-  opacity: 0.7;
 }

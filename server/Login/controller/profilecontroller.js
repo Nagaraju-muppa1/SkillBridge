@@ -84,16 +84,17 @@ const profileSetups = async(req,res)=>{
 
 const profileEdit = async(req,res)=>{
   try{
-    const clerkId = req.params.id;
+    const clerkUserId = req.params.id;
     const newData = req.body;
-    const found = await profileSetup.findOne({clerkId:clerkId});
+    console.log(newData);
+    const found = await userModel.findOne({clerkUserId:clerkUserId});
+    console.log(found);
     if(!found){
       return res.status(201).json({
         success:false
       })
     } 
-    //console.log(found._id);
-    const updatedDoc = await profileSetup.findByIdAndUpdate(
+    const updatedDoc = await userModel.findByIdAndUpdate(
       found._id,
       {
         $set: newData
