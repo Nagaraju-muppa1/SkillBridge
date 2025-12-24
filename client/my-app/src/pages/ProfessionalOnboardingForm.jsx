@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
-import './OnboardingForm.css'; 
+import './OnboardingForm.css';
+import Navigationbar from './Navigationbar';
 
 export default function ProfessionalOnboardingForm() {
   const { isLoaded, user } = useUser();
@@ -10,7 +11,7 @@ export default function ProfessionalOnboardingForm() {
   const demo='PF123'
   const days =["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
   const countries = ["India", "USA", "UK", "Canada", "Germany"];
-  const [availableDays,setAvailableDays]=useState([]);
+  const [availabledays,setAvailableDays]=useState([]);
   const [mode, setMode] = useState(""); 
   const [formData, setFormData] = useState({
     skill:'',
@@ -63,7 +64,7 @@ export default function ProfessionalOnboardingForm() {
         experience:Number(formData.experience),
         bio:formData.bio,
         mode:mode,
-        availableDays:availableDays,
+        availabledays:availabledays,
         address:formData.address,
         village: formData.village,
         city: formData.city,
@@ -98,6 +99,7 @@ export default function ProfessionalOnboardingForm() {
 
   return (
     // 2. Use classNames instead of style props
+   <>
     <div className="onboarding-container">
       <form onSubmit={handleSubmit} className="onboarding-form">
         <h2>Complete Your Professional Profile</h2>
@@ -139,7 +141,7 @@ export default function ProfessionalOnboardingForm() {
               <input
                 type="checkbox"
                 value={day}
-                checked={availableDays.includes(day)}
+                checked={availabledays.includes(day)}
                 onChange={() => handledays(day)}
               />
               {day}
@@ -175,5 +177,6 @@ export default function ProfessionalOnboardingForm() {
         </button>
       </form>
     </div>
+    </>
   );
 }

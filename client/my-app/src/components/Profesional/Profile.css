@@ -1,57 +1,21 @@
 .profile-container {
+  padding: 40px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(to bottom right, #e0f2fe, #cbd5e1);
-  padding: 20px;
 }
 
-.profile-form {
-  background: white;
+.profile-card {
+  width: 600px;
+  background: #ffffff;
   padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-.form-title {
-  text-align: center;
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #1e3a8a;
+.profile-card p {
+  margin: 8px 0;
 }
 
-.profile-form input,
-.profile-form select {
-  width: 100%;
-  padding: 12px 14px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 0.3s;
-}
-
-.profile-form input:focus,
-.profile-form select:focus {
-  border-color: #3b82f6;
-  outline: none;
-}
-
-.profile-form button {
-  width: 100%;
-  padding: 12px;
-  background-color: #2563eb;
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.profile-form button:hover {
-  background-color: #1d4ed8;
+.profile-card ul {
+  padding-left: 20px;
 }
