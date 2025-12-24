@@ -1,0 +1,87 @@
+.navbar {
+  height: 70px;
+  padding: 0 30px;
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  position: relative;
+}
+
+/* Left */
+.navbar-left {
+  flex: 1;
+}
+
+.logo {
+  color: #2563eb;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Center */
+.navbar-center {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.search-input {
+  width: 60%;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  outline: none;
+}
+
+/* Right */
+.navbar-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 18px;
+  position: relative;
+}
+
+.icon {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.profile-img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.menu-icon {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Dropdown */
+.dropdown {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  width: 150px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown div {
+  padding: 12px 15px;
+  cursor: pointer;
+}
+
+.dropdown div:hover {
+  background-color: #f3f4f6;
+}
+
+.logout {
+  color: #dc2626;
+}

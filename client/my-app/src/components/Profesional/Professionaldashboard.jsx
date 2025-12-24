@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./ProfessionalDashboard.css";
+import "../../pages/Navigation.css";
+import Navigationbar from "../../pages/Navigationbar";
 
 const ProfessionalDashboard = () => {
   const [activeTab, setActiveTab] = useState("posts");
@@ -20,6 +22,7 @@ const ProfessionalDashboard = () => {
   };
 
   return (
+    <><Navigationbar/>
     <div className="dashboard-container">
       {/* Top Profile Section */}
       <div className="profile-header">
@@ -55,6 +58,7 @@ const ProfessionalDashboard = () => {
       {/* Dynamic Content */}
       <div className="tab-content">{renderContent()}</div>
     </div>
+    </>
   );
 };
 

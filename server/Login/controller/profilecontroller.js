@@ -22,19 +22,16 @@ const saveProfile = async (req, res) => {
 const getDetails = async(req,res)=>{
   console.log("getdetails");
   try{
-    const {email,password}=req.body;
-    const found = await userModel.findOne({email:email});
+   
+    const clerkUserId = req.params.id;
+    console.log(clerkUserId);
+    const found = await userModel.findOne({clerkUserId:clerkUserId});
+    console.log(found);
     if(!found){
        return res.status(201).json({
         success:false,
-        message:"Invalid Email"
+        message:"Data Not Found"
        })
-    }
-    if(password != found.password){
-      return res.status(201).json({
-        success:false,
-        message:"Incorrect Password"
-      })
     }
     return res.status(200).json({
       success:true,
