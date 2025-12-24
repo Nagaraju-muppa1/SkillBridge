@@ -3,73 +3,121 @@ import axios from "axios";
 import "./Profile.css";
 
 function Profile() {
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState({});
   const [loading, setLoading] = useState(true);
+  const [editableFields, setEditableFields] = useState({});
+  const [updatedFields, setUpdatedFields] = useState({});
 
   useEffect(() => {
     const getDetails = async () => {
       try {
-        const clerkUserId = "PF123"; // later replace with localStorage value
+        const clerkUserId = "PF123"; // replace with localStorage if needed
         const response = await axios.get(
           `http://localhost:5001/userdetails/${clerkUserId}`
         );
-        //console.log(response.data.message);
-        const profileData = response.data.message;
-        setProfile(profileData);
-       // console.log(profile);
+        setProfile(response.data.message);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching profile:", error);
         setLoading(false);
       }
     };
-
     getDetails();
   }, []);
-  useEffect(() => {
-  if (profile) {
-    console.log("Profile state after render:", profile); // ✅ correct state
-  }
-  }, [profile]);
+
+  const handleEditClick = (field) => {
+    setEditableFields({ ...editableFields, [field]: true });
+  };
+
+  const handleChange = (e, field) => {
+    const value = e.target.value;
+    setProfile({ ...profile, [field]: value });
+    setUpdatedFields({ ...updatedFields, [field]: value });
+  };
+
+  const handleSubmit = async () => {
+    if (Object.keys(updatedFields).length === 0) {
+      alert("No changes made!");
+      return;
+    }
+
+    try {
+      console.log(updatedFields);
+      const response = await axios.put(
+        `http://localhost:5001/profile-updating/${profile.clerkUserId}`,
+        updatedFields
+      );
+      alert("Profile updated successfully!");
+      setEditableFields({});
+      setUpdatedFields({});
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Failed to update profile.");
+    }
+  };
 
   if (loading) return <h2>Loading profile...</h2>;
 
+  const renderInput = (label, field, type = "text") => (
+    <div className="profile-row">
+      <label>{label}:</label>
+      <input
+        type={type}
+        value={profile[field] || ""}
+        readOnly={!editableFields[field]}
+        onChange={(e) => handleChange(e, field)}
+      />
+      <button
+        type="button"
+        className="edit-btn"
+        onClick={() => handleEditClick(field)}
+      >
+        Edit
+      </button>
+    </div>
+  );
+
   return (
     <div className="profile-container">
-      <h1>Profile</h1>
-
       <div className="profile-card">
-        <p><strong>Full Name:</strong> {profile.fullname}</p>
-        <p><strong>Username:</strong> {profile.username}</p>
-        <p><strong>Email:</strong> {profile.email}</p>
-        <p><strong>Role:</strong> {profile.role}</p>
-        <p><strong>Skill:</strong> {profile.skill}</p>
-        <p><strong>Experience:</strong> {profile.experience} years</p>
-        <p><strong>Bio:</strong> {profile.bio}</p>
+        <h2>Basic Info</h2>
+        {renderInput("Full Name", "fullname")}
+        {renderInput("Username", "username")}
+        {renderInput("Email", "email", "email")}
+        {renderInput("Role", "role")}
+        {renderInput("Skill", "skill")}
+        {renderInput("Experience (years)", "experience", "number")}
+        {renderInput("Bio", "bio")}
 
-        <hr />
+        <h2>Address</h2>
+        {renderInput("Village", "village")}
+        {renderInput("City", "city")}
+        {renderInput("District", "district")}
+        {renderInput("State", "state")}
+        {renderInput("Country", "country")}
+        {renderInput("Pincode", "pincode")}
 
-        <p><strong>Address:</strong></p>
-        <p>
-          {profile.village}, {profile.city}, {profile.district},
-          {profile.state}, {profile.country} - {profile.pincode}
-        </p>
+        <h2>Availability</h2>
+        <div className="profile-row">
+          <label>Available Days:</label>
+          <ul className="array-field">
+            {profile.availabledays?.map((day, idx) => (
+              <li key={idx}>{day}</li>
+            )) || <li>Not specified</li>}
+          </ul>
+        </div>
+        <div className="profile-row">
+          <label>Mode:</label>
+          <ul className="array-field">
+            {profile.mode?.map((m, idx) => (
+              <li key={idx}>{m}</li>
+            )) || <li>Not specified</li>}
+          </ul>
+        </div>
 
-        <hr />
-
-        <p><strong>Available Days:</strong></p>
-        <ul>
-        {profile?.availabledays?.length > 0 ? (
-            profile.availabledays.map((day, index) => (
-            <li key={index}>{day}</li>
-            ))
-        ) : (
-            <li>No availability provided</li>
-        )}
-        </ul>
-
-
-        <p><strong>Mode:</strong> {profile?.mode?.join(", ") || "Not specified"}</p>
+        <button type="button" className="save-btn" onClick={handleSubmit}>
+          Save Changes
+        </button>
       </div>
     </div>
   );
