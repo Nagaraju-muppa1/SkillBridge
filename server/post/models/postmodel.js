@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const postSchema = new mongoose.schema({
+const postSchema =  mongoose.Schema({
     clerkUserId:{
-        String,
+       type:String
     },
-    imageUrl:{String},
-    content:{String}
+    imageUrl:{type:String},
+    content:{type:String}
 },{
      timestamps: true,
 })
