@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import "./ProfessionalDashboard.css";
 import "../../pages/Navigation.css";
+import axios from 'axios';
+import Posts from "../Profesional/Posts"
 import Navigationbar from "../../pages/Navigationbar";
 
 const ProfessionalDashboard = () => {
   const [activeTab, setActiveTab] = useState("posts");
+  const [posts, setPosts] = useState([]);
+  const [content,setContent]=useState('');
+  const [popup,setPopUpOpen]=useState(false)
 
   const renderContent = () => {
     switch (activeTab) {
       case "posts":
-        return <div className="content-box">📌 Professional posts appear here</div>;
+        return <Posts/>
       case "courses":
         return <div className="content-box">🎥 Courses & videos list here</div>;
       case "reviews":
@@ -38,7 +43,6 @@ const ProfessionalDashboard = () => {
         </p>
         </div>
       </div>
-
       {/* Tabs */}
       <div className="tabs">
         <button onClick={() => setActiveTab("posts")} className={activeTab === "posts" ? "active" : ""}>
@@ -56,7 +60,9 @@ const ProfessionalDashboard = () => {
       </div>
 
       {/* Dynamic Content */}
-      <div className="tab-content">{renderContent()}</div>
+      <div className="tab-content">
+          {renderContent()}
+      </div>
     </div>
     </>
   );
