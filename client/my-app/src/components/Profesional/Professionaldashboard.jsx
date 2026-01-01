@@ -3,6 +3,7 @@ import "./ProfessionalDashboard.css";
 import "../../pages/Navigation.css";
 import axios from 'axios';
 import Posts from "../Profesional/Posts"
+import Courses from "./Courses";
 import Navigationbar from "../../pages/Navigationbar";
 
 const ProfessionalDashboard = () => {
@@ -16,7 +17,7 @@ const ProfessionalDashboard = () => {
       case "posts":
         return <Posts/>
       case "courses":
-        return <div className="content-box">🎥 Courses & videos list here</div>;
+        return <Courses></Courses>;
       case "reviews":
         return <div className="content-box">⭐ Reviews & ratings shown here</div>;
       case "book":

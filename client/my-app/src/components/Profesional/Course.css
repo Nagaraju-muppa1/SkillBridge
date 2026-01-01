@@ -1,0 +1,52 @@
+.video-section {
+  padding: 20px;
+}
+
+/* Empty state */
+.no-videos {
+  text-align: center;
+  font-size: 18px;
+  color: #777;
+  padding: 40px 0;
+}
+
+/* Grid layout */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Video card */
+.video-card {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+/* Video player */
+.video-player {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background: #000;
+}
+
+/* Info section */
+.video-info {
+  padding: 12px 14px;
+}
+
+/* Description */
+.video-description {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.4;
+}
