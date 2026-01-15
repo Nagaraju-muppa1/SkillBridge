@@ -6,6 +6,10 @@ const userSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
+  UserId: {               
+        type: String,
+        unique: true
+  },
   fullname:{
     type:String,
   },
@@ -15,13 +19,13 @@ const userSchema = mongoose.Schema({
   email:{
     type:String,
   },
-  password:{
+  mobileno:{
     type:String,
   },
   role: {
     type: String,
     required: true,
-    enum: ["Learner", "Professional"] // Removed "Admin" for now unless you need it
+    enum: ["learner", "professional"] // Removed "Admin" for now unless you need it
   },
     village:{
       type:String,
