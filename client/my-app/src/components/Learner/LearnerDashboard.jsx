@@ -1,7 +1,7 @@
 import React from "react";
 import "./LearnerDb.css";
 
-function LearnerDb() {
+function LearnerDashboard() {
   return (
     <div className="learner-dashboard-container">
       <aside className="learner-sidebar">
@@ -43,4 +43,4 @@ function LearnerDb() {
   );
 }
 
-export default LearnerDb;
+export default LearnerDashboard;

@@ -14,6 +14,7 @@ import DashboardRouter from './pages/DashboardRouter';
 import Professionaldashboard from './components/Profesional/Professionaldashboard';
 import Navigationbar from './pages/Navigationbar';
 import Profile from "./components/Profesional/Profile";
+import LearnerDashboard from './components/Learner/LearnerDashboard';
 
 /**
  * This component protects routes that ONLY signed-in users can see.
@@ -68,6 +69,7 @@ function App() {
         <Route path="/professionaldashboard" element={<Professionaldashboard/>}/>
         <Route path="/navigationbar" element={<Navigationbar/>}></Route>
         <Route path="/profile" element={<Profile/>}/>
+        <Route path="learnerdashboard" element={<LearnerDashboard/>}/>
         {/* Add any other protected routes here */}
       </Route>
 

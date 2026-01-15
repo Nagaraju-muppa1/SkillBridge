@@ -1,0 +1,62 @@
+.loader-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9fafb; /* light gray background */
+  font-family: Arial, sans-serif;
+}
+
+.loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #4f46e5;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* NEW: Error message container */
+.error-container {
+  text-align: center;
+  background-color: #ffe5e5; /* light red background */
+  color: #b91c1c; /* dark red text */
+  padding: 20px 40px;
+  border: 1px solid #f87171;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Optional fade-in animation */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.error-container button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #b91c1c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.error-container button:hover {
+  background-color: #7f1d1d;
+}

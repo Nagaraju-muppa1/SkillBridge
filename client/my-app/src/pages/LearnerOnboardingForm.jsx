@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import './OnboardingForm.css'; // <-- 1. IMPORT THE SAME CSS
+import axios from 'axios';
 
 export default function LearnerOnboardingForm() {
   const { isLoaded, user } = useUser();
@@ -43,25 +44,30 @@ export default function LearnerOnboardingForm() {
     }
 
     try {
-      // --- Your API call logic ---
-      const response = await fetch('http://localhost:5000/api/user-service/profile', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          clerkUserId: user.id,
-          email: user.primaryEmailAddress?.emailAddress,
-          role: 'learner',
-          ...formData,
-        }),
-      });
-      // --- End of API call ---
+      const newdata ={
+        clerkUserId: user.id,
+        email: user.primaryEmailAddress?.emailAddress,
+        role: 'learner',
+        address: formData.address,
+        interest: formData.interest,
+        contact: formData.contact,
+        district: formData.district,
+        city: formData.city,
+        state: formData.state,
+        country: formData.country,
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to save profile');
       }
+      const response = await axios.put('http://localhost:5001/user-service/profile',newdata);
 
-      navigate('/dashboard');
+    
+         const data = {
+             clerkUserId : response.data.clerkUserId,
+             UserId : response.data.UserId,
+             role : response.data.role
+        }
+        localStorage.setItem("customer",JSON.stringify(data));
+
+      navigate('/learnerdashboard');
 
     } catch (err) {
       setError(err.message || 'An error occurred. Please try again.');

@@ -1,49 +1,75 @@
-// src/pages/RoleSelectionPage.jsx
-
-import React from 'react';
+import { useState, useEffect } from "react";
 import { useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import './Loader.css';
 
 export default function RoleSelectionPage() {
-  const { isLoaded, user } = useUser();
   const navigate = useNavigate();
+  const { user, isLoaded } = useUser();
+  const [role, setRole] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError]= useState(false);
 
-  // This function updates the user's role in Clerk's database
-  const assignRole = async (role) => {
-    if (!isLoaded || !user) {
-      return;
-    }
-    
-    try {
-      // We store the role in publicMetadata. This is the standard way.
-      await user.update({
-        unsafeMetadata: {  // <-- CHANGED
-          ...user.unsafeMetadata,
-          role: role, 
-        },
-      });
-      // After assigning the role, send them to their dashboard
-     if (role === 'learner') {
-        navigate('/onboarding/learner');
-      } else if (role === 'professional') {
-        navigate('/onboarding/professional');
-      } 
-    } catch (error) {
-      console.error("Error updating user role:", error);
-    }
-  };
+  useEffect(() => {
+    if (!isLoaded || !user) return;
 
+    // show loader for 1 second before calling API
+    const timer = setTimeout(async () => {
+      try {
+        const clerkUserId = user.id;
+        const response = await axios.get(`http://localhost:5001/getRole/${clerkUserId}`);
+        const data = {
+             clerkUserId : response.data.clerkUserId,
+             UserId : response.data.UserId,
+             role : response.data.role
+        }
+        localStorage.setItem("customer",JSON.stringify(data));
+        const fetchedRole = response.data.role;
+        setRole(fetchedRole);
+
+        // navigate based on role
+        if (fetchedRole === "professional") {
+          navigate("/professionaldashboard", { replace: true });
+        } else {
+          navigate("/learnerdashboard", { replace: true });
+        }
+      } catch (error) {
+        setError(true);
+        console.log(error);
+      } finally {
+        setLoading(false); 
+      }
+    }, 1000); // 1 second delay
+
+    return () => clearTimeout(timer);
+  }, [isLoaded, user, navigate]);
+
+  if(loading){
+      return (
+    <>
+      { loading && (
+        <div className="loader-page">
+   
+        <div className="loader"></div>
+          <p>Preparing your dashboard...</p>
+        </div>
+      )
+      }
+      
+    </>
+      )
+  }
+  if (error) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#0d0d1a', color: 'white' }}>
-      <h1>Welcome! Please select your role.</h1>
-      <div style={{ display: 'flex', gap: '20px', marginTop: '30px' }}>
-        <button className="get-started-btn" onClick={() => assignRole('learner')}>
-          I am a Learner
-        </button>
-        <button className="get-started-btn" onClick={() => assignRole('professional')}>
-          I am a Professional
-        </button>
+    <div className="loader-page">
+      <div className="error-container">
+        <p>Something went wrong. Please try again.</p>
+        <button onClick={() => window.location.reload()}>Retry</button>
       </div>
     </div>
   );
+}
+
+
 }
