@@ -1,19 +1,23 @@
 // src/pages/ProfessionalOnboardingForm.jsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import './OnboardingForm.css';
 import Navigationbar from './Navigationbar';
+import axios from 'axios';
 
 export default function ProfessionalOnboardingForm() {
   const { isLoaded, user } = useUser();
+  const [called,setCall]=useState(true);
   const navigate = useNavigate();
-  const demo='PF123'
   const days =["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
   const countries = ["India", "USA", "UK", "Canada", "Germany"];
   const [availabledays,setAvailableDays]=useState([]);
   const [mode, setMode] = useState(""); 
   const [formData, setFormData] = useState({
+    fullname:'',
+    username:'',
+    mobileno:'',
     skill:'',
     experience: '',
     bio:'',
@@ -57,9 +61,12 @@ export default function ProfessionalOnboardingForm() {
 
     try {
       const newdata ={
-        clerkUserId:demo,
+        clerkUserId:user.id,
         email: user.primaryEmailAddress?.emailAddress,
-        role: 'Professional',
+        role: 'professional',
+        fullname:formData.fullname,
+        username:formData.username,
+        mobileno:formData.mobileno,
         skill: formData.skill,
         experience:Number(formData.experience),
         bio:formData.bio,
@@ -74,19 +81,16 @@ export default function ProfessionalOnboardingForm() {
         pincode:formData.pincode
       }
       console.log(newdata);
-      // --- Your API call logic ---
-      const response = await fetch(`http://localhost:5001/profile-updating/${demo}`, { 
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newdata),
-      });
-      // --- End of API call ---
+      // ---  API call logic ---
+      const response = await axios.put(`http://localhost:5001/user-service/profile`,newdata);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to save profile');
-      }
 
+        console.log(response);
+        const data = {
+             UserId : response.data.UserId,
+             role : response.data.role
+        }
+        localStorage.setItem("customer",JSON.stringify(data));
       navigate('/professionaldashboard');
 
     } catch (err) {
@@ -103,6 +107,15 @@ export default function ProfessionalOnboardingForm() {
     <div className="onboarding-container">
       <form onSubmit={handleSubmit} className="onboarding-form">
         <h2>Complete Your Professional Profile</h2>
+        <div>
+          <h4>Personal details</h4>
+          <label for="fullname">FullName:</label>
+          <input type="text" name="fullname" placeholder="Enter your FullName" onChange={handleChange} className="onboarding-input" required/><br/>
+          <label for="username">UserName:</label>
+          <input type="text" name="username" placeholder="Enter your UserName" onChange={handleChange} className="onboarding-input" required/><br/>
+          <label for="mobileno">MobileNo:</label>
+          <input type="number" name="mobileno" placeholder="Enter your contactno" onChange={handleChange} className="onboarding-input" required/><br/>
+        </div>
         <div>
           <h4>Skill Information</h4>
           <label for="skill">Skill:</label>

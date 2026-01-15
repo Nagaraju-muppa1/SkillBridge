@@ -25,7 +25,7 @@ function Courses(){
            }
             const formData = new FormData();
             formData.append("file", file);
-            formData.append("folder", 'skillbridge_posts');
+            formData.append("upload_preset", 'skillbridge_videos');
             const response=await axios.post(`https://api.cloudinary.com/v1_1/duwwsrzyp/video/upload`,formData,
                  { headers: { "Content-Type": "multipart/form-data" } }
             );

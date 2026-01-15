@@ -1,12 +1,13 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const userModel = require('../model/usermodel.js');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const {JWT_SCRETE_TOKEN}=process.env;
+// const jwt = require('jsonwebtoken');
+// const bcrypt = require('bcrypt');
+// const {JWT_SCRETE_TOKEN}=process.env;
 
 const signup = async(req,res)=>{
-    const { firstname,lastname,email,password,role} = req.body;
+    const {clerkUserId,email,role} = req.body;
+    console.log(email,role);
    try{
         const userExist = await userModel.findOne({email});
         if(userExist){
@@ -15,22 +16,14 @@ const signup = async(req,res)=>{
                message: "User email already exists."
             })
         }
-        const hashpassword= await bcrypt.hash(password,10);
-
         const user= new userModel({
-            firstname,
-            lastname,
+            clerkUserId,
             email,
-            password:hashpassword,
             role,
         })
-
         const savedUser =await user.save();
-
-        const token =jwt.sign({email,role},JWT_SCRETE_TOKEN)
         res.status(200).json({
-            message:role, 
-            token
+            message:role,
         })
     }
     catch(error){
