@@ -74,7 +74,7 @@ function Posts(){
         <div>
              <div className="content-box"> <button onClick={()=> setPopUpOpen(true)}>create</button>
     
-              </div>;
+              </div>
             {popup && (
             <div className="modal-overlay">
               <div className="modal-box">
