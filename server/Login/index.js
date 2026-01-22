@@ -4,10 +4,13 @@ const cors = require('cors');
 const app = express();
 const route = require('./routes/userroute.js');
 const dbc = require('./database/db.js');
+const videoRoutes = require("./routes/VideoRoutess.js");
 const port = 5001;
 
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/videos", videoRoutes);
 
 app.use((req, res, next) => {
   console.log("LOGIN SERVICE HIT:", req.method, req.url);
