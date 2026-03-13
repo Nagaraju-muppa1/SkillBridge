@@ -1,123 +1,146 @@
-import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useUser } from '@clerk/clerk-react';
+import { useEffect, useState } from "react";
 import axios from "axios";
-import "./Profile.css";
 
 function Profile() {
-  const [profile, setProfile] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [editableFields, setEditableFields] = useState({});
-  const [updatedFields, setUpdatedFields] = useState({});
-
+  const { isLoaded, user } = useUser();
+  const { id } = useParams();
+  const [userp, setUser] = useState(null);
+  const [showSlots, setShowSlots] = useState(false); // toggle slot card
+  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [slots, setSlots] = useState([]);
+  const [userId,setUserId] = useState(null);
+  console.log(user.id);
   useEffect(() => {
-    const getDetails = async () => {
+    const fetchProfile = async () => {
       try {
-        const clerkUserId = "PF123"; // replace with localStorage if needed
-        const response = await axios.get(
-          `http://localhost:5001/userdetails/${clerkUserId}`
-        );
-        setProfile(response.data.message);
-        setLoading(false);
+        const res = await axios.get(`http://localhost:5001/profile/${id}`);
+        setUserId(res.data.data.UserId);
+        setUser(res.data.data);
       } catch (error) {
-        console.error("Error fetching profile:", error);
-        setLoading(false);
+        console.log(error);
       }
     };
-    getDetails();
-  }, []);
+    fetchProfile();
+  }, [id]);
 
-  const handleEditClick = (field) => {
-    setEditableFields({ ...editableFields, [field]: true });
-  };
+  if (!userp) return <h2>Loading...</h2>;
 
-  const handleChange = (e, field) => {
-    const value = e.target.value;
-    setProfile({ ...profile, [field]: value });
-    setUpdatedFields({ ...updatedFields, [field]: value });
-  };
-
-  const handleSubmit = async () => {
-    if (Object.keys(updatedFields).length === 0) {
-      alert("No changes made!");
-      return;
+  const handleBookDemo = async()=>{
+    try{
+       const res = await axios.get(`http://localhost:5004/getSlots/${userId}`);
+       console.log(res.data);
+       setSlots(res.data.message);
+       setShowSlots(true); 
+    }catch(error){
+       console.log(error);
+       return res.status(404).json({
+        success:"False",
+        message:"Error Occured"
+       })
     }
+  }
+
+  const handleSendRequest = async () => {
+    if (!selectedSlot) return alert("Select a slot first!");
 
     try {
-      console.log(updatedFields);
-      const response = await axios.put(
-        `http://localhost:5001/profile-updating/${profile.clerkUserId}`,
-        updatedFields
-      );
-      alert("Profile updated successfully!");
-      setEditableFields({});
-      setUpdatedFields({});
+      const payload = {
+        learnerId: user.id,
+        slot: selectedSlot,
+        status:"Pending"
+      };
+      console.log(payload);
+      const res = await axios.post("http://localhost:5001/book-demo", payload);
+      alert("Request sent successfully! ✅");
+      setShowSlots(false);
     } catch (error) {
-      console.error("Error updating profile:", error);
-      alert("Failed to update profile.");
+      console.log(error);
+      alert("Error sending request.");
     }
   };
 
-  if (loading) return <h2>Loading profile...</h2>;
-
-  const renderInput = (label, field, type = "text") => (
-    <div className="profile-row">
-      <label>{label}:</label>
-      <input
-        type={type}
-        value={profile[field] || ""}
-        readOnly={!editableFields[field]}
-        onChange={(e) => handleChange(e, field)}
-      />
-      <button
-        type="button"
-        className="edit-btn"
-        onClick={() => handleEditClick(field)}
-      >
-        Edit
-      </button>
-    </div>
-  );
-
   return (
-    <div className="profile-container">
-      <div className="profile-card">
-        <h2>Basic Info</h2>
-        {renderInput("Full Name", "fullname")}
-        {renderInput("Username", "username")}
-        {renderInput("Email", "email", "email")}
-        {renderInput("Role", "role")}
-        {renderInput("Skill", "skill")}
-        {renderInput("Experience (years)", "experience", "number")}
-        {renderInput("Bio", "bio")}
+    <div style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}>
+      <div style={{
+        backgroundColor: "#0b0f14",
+        color: "#fff",
+        width: "400px",
+        borderRadius: "12px",
+        padding: "24px",
+        boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+        textAlign: "center",
+        fontFamily: "Arial, sans-serif",
+      }}>
+        <h2>{userp.fullname}</h2>
+        <p><b>Skill:</b> {userp.skill}</p>
+        <p><b>Experience:</b> {userp.experience} years</p>
+        <p><b>Available Days:</b> {userp.availabledays?.join(", ")}</p>
+        <p><b>Mode:</b> {userp.mode?.join(", ")}</p>
+        <p><b>Location:</b> {userp.city}, {userp.state}</p>
+        <p style={{ fontSize: "14px", margin: "12px 0", opacity: 0.85 }}>{userp.bio}</p>
 
-        <h2>Address</h2>
-        {renderInput("Village", "village")}
-        {renderInput("City", "city")}
-        {renderInput("District", "district")}
-        {renderInput("State", "state")}
-        {renderInput("Country", "country")}
-        {renderInput("Pincode", "pincode")}
-
-        <h2>Availability</h2>
-        <div className="profile-row">
-          <label>Available Days:</label>
-          <ul className="array-field">
-            {profile.availabledays?.map((day, idx) => (
-              <li key={idx}>{day}</li>
-            )) || <li>Not specified</li>}
-          </ul>
-        </div>
-        <div className="profile-row">
-          <label>Mode:</label>
-          <ul className="array-field">
-            {profile.mode?.map((m, idx) => (
-              <li key={idx}>{m}</li>
-            )) || <li>Not specified</li>}
-          </ul>
-        </div>
-
-        <button type="button" className="save-btn" onClick={handleSubmit}>
-          Save Changes
+        <button
+          onClick={handleBookDemo}
+          style={{
+            marginTop: "16px",
+            padding: "12px 24px",
+            border: "none",
+            borderRadius: "8px",
+            backgroundColor: "#3b82f6",
+            color: "#fff",
+            fontWeight: "bold",
+            fontSize: "16px",
+            cursor: "pointer",
+          }}
+        >
+          Book Demo Class
         </button>
+
+        {showSlots && (
+          <div style={{
+            marginTop: "20px",
+            backgroundColor: "#1a1f28",
+            padding: "16px",
+            borderRadius: "12px"
+          }}>
+            <h3>Select a Slot</h3>
+            {slots.length === 0 && <p>No slots available</p>}
+            {slots.map((slot, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    padding: "8px",
+                    margin: "8px 0",
+                    borderRadius: "8px",
+                    backgroundColor: selectedSlot === slot ? "#3b82f6" : "#0b0f14",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setSelectedSlot(slot)}
+                >
+                  <span>{slot.day}</span>
+                  <span>{slot.startTime} - {slot.endTime}</span>
+                </div>
+              ))}
+            <button
+              onClick={handleSendRequest}
+              style={{
+                marginTop: "12px",
+                padding: "10px 20px",
+                borderRadius: "8px",
+                border: "none",
+                backgroundColor: "#10b981",
+                fontWeight: "bold",
+                cursor: "pointer"
+              }}
+            >
+              Send Request
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
