@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {slots}= require("../controller/available");
+const {slots,getSlots}= require("../controller/available");
 router.post("/saveSlots",slots);
+router.get("/getSlots/:UserId",getSlots);
 module.exports = router;

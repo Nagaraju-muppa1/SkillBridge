@@ -5,7 +5,7 @@ const availability = mongoose.Schema({
         required:true
     },
     day:{
-        type:Number,
+        type:String,
         required: true,
         min: 0,
         max: 6 
