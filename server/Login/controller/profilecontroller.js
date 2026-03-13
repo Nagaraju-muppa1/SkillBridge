@@ -2,24 +2,7 @@ const userModel = require('../model/usermodel.js');
 const Counter = require('../model/counterSchema.js')
 const profileSetup = require('../model/profileSetup.js')
 
-// const saveProfile = async (req, res) => {
-//   try {
-//     const profileData = req.body;
-//     console.log('Backend received profile data:', profileData);
 
-//     const userProfile = await userModel.findOneAndUpdate(
-//       { clerkUserId: profileData.clerkUserId }, // Find user by Clerk ID
-//         profileData, // Update with all form data
-//       { new: true, upsert: true } // Create them if they don't exist
-//     );
-
-//     res.status(201).json(userProfile);
-
-//   } catch (error) {
-//     console.error("Error saving profile:", error);
-//     res.status(500).json({ message: "Error saving profile to database" });
-//   }
-// };
 
 const saveProfile = async (req, res) => {
   try {
@@ -150,5 +133,56 @@ const getRole = async(req,res)=>{
       })
    }
 }
+const getProfessional = async(req,res)=>{
+  try{
+      const {skill}= req.query;
+      const details = await userModel.find({
+      skill: { $regex: skill, $options: "i" } 
+    });
 
-module.exports = { saveProfile,profileEdit,getDetails,getRole};
+    if (details.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No slots found for this skill",
+        data: []
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: details
+    });
+
+  }catch(error){
+    console.log(error);
+    res.status(404).json({
+      success:false,
+      message:"Error"
+    })
+  }
+}
+const profile = async(req,res)=>{
+  try {
+    const id=req.params._id;
+    console.log(id);
+    const user = await userModel.findById({_id:id});
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Professional not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: user
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+}
+}
+module.exports = { saveProfile,profileEdit,getDetails,getRole,getProfessional,profile};
