@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const {slots,getSlots}= require("../controller/available");
+const {requestSlot,fetchRequests,updateStatus} = require("../controller/requests");
 router.post("/saveSlots",slots);
 router.get("/getSlots/:UserId",getSlots);
+router.post('/requestSlot',requestSlot);
+router.get('/fetchRequests/:UserId',fetchRequests);
+router.put('/updateRequestStatus/:id',updateStatus);
 module.exports = router;

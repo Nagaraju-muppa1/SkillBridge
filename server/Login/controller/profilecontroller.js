@@ -77,6 +77,25 @@ const getDetails = async(req,res)=>{
   }
 }
 
+const getName = async(req,res)=>{
+   try{
+      const UserId = req.params.UserId;
+      console.log(UserId);
+      const data = await userModel.find({UserId:UserId});
+      console.log(data[0].fullname);
+      return res.status(200).json({
+         success:"true",
+         message: data[0].fullname
+      })
+
+   }catch(error){
+      console.log(error);
+      return res.status(404).json({
+         sucess:"false",
+         message:"Error while fetching the data."
+      })
+   }
+}
 const profileEdit = async(req,res)=>{
   try{
     const clerkUserId = req.params.id;
@@ -185,4 +204,4 @@ const profile = async(req,res)=>{
     });
 }
 }
-module.exports = { saveProfile,profileEdit,getDetails,getRole,getProfessional,profile};
+module.exports = { saveProfile,profileEdit,getDetails,getRole,getProfessional,profile, getName};
