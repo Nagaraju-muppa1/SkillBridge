@@ -1,0 +1,15 @@
+const express = require("express");
+const router = express.Router();
+const {slots,getSlots}= require("../controller/available");
+const {requestSlot,fetchRequests,updateStatus} = require("../controller/requests");
+const {saveNotifications, markAsRead,getNotifications,getUnreadCount}= require("../controller/notifications");
+router.post("/saveSlots",slots);
+router.get("/getSlots/:UserId",getSlots);
+router.post('/requestSlot',requestSlot);
+router.get('/fetchRequests/:UserId',fetchRequests);
+router.put('/updateRequestStatus/:id',updateStatus);
+router.post('/saveNotification',saveNotifications);
+router.get('/getNotifications/:userId',getNotifications);
+router.put('/markAsRead/:id',markAsRead);
+router.get('/getUnreadCount/:userId', getUnreadCount);
+module.exports = router;

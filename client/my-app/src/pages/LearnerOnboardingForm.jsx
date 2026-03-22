@@ -1,14 +1,17 @@
-    // src/pages/LearnerOnboardingForm.jsx
+// src/pages/LearnerOnboardingForm.jsx
 import React, { useState } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
-import './OnboardingForm.css'; // <-- 1. IMPORT THE SAME CSS
+import './OnboardingForm.css';
 import axios from 'axios';
 
 export default function LearnerOnboardingForm() {
   const { isLoaded, user } = useUser();
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
+    fullname: '',      // 🔥 NEW
+    username: '',      // 🔥 NEW
     address: '',
     interest: '',
     contact: '',
@@ -17,6 +20,7 @@ export default function LearnerOnboardingForm() {
     state: '',
     country: '',
   });
+
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -37,17 +41,32 @@ export default function LearnerOnboardingForm() {
       return;
     }
 
-    if (!formData.address || !formData.interest || !formData.contact || !formData.city || !formData.state || !formData.country) {
+    // 🔥 Updated validation
+    if (
+      !formData.fullname ||
+      !formData.username ||
+      !formData.address ||
+      !formData.interest ||
+      !formData.contact ||
+      !formData.city ||
+      !formData.state ||
+      !formData.country
+    ) {
       setError('Please fill in all required fields.');
       setLoading(false);
       return;
     }
 
     try {
-      const newdata ={
+      const newdata = {
         clerkUserId: user.id,
         email: user.primaryEmailAddress?.emailAddress,
         role: 'learner',
+
+        // 🔥 NEW FIELDS
+        fullname: formData.fullname,
+        username: formData.username,
+
         address: formData.address,
         interest: formData.interest,
         contact: formData.contact,
@@ -55,17 +74,20 @@ export default function LearnerOnboardingForm() {
         city: formData.city,
         state: formData.state,
         country: formData.country,
+      };
 
-      }
-      const response = await axios.put('http://localhost:5001/user-service/profile',newdata);
+      const response = await axios.put(
+        'http://localhost:5001/user-service/profile',
+        newdata
+      );
 
-    
-         const data = {
-             clerkUserId : response.data.clerkUserId,
-             UserId : response.data.UserId,
-             role : response.data.role
-        }
-        localStorage.setItem("customer",JSON.stringify(data));
+      const data = {
+        clerkUserId: response.data.clerkUserId,
+        UserId: response.data.UserId,
+        role: response.data.role,
+      };
+
+      localStorage.setItem("customer", JSON.stringify(data));
 
       navigate('/learnerdashboard');
 
@@ -78,10 +100,28 @@ export default function LearnerOnboardingForm() {
   };
 
   return (
-    // 2. Use classNames instead of style props
     <div className="onboarding-container">
       <form onSubmit={handleSubmit} className="onboarding-form">
         <h2>Complete Your Learner Profile</h2>
+
+        {/* 🔥 NEW INPUTS */}
+        <input
+          type="text"
+          name="fullname"
+          placeholder="Full Name"
+          onChange={handleChange}
+          className="onboarding-input"
+          required
+        />
+
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          onChange={handleChange}
+          className="onboarding-input"
+          required
+        />
 
         <input type="text" name="address" placeholder="Address" onChange={handleChange} className="onboarding-input" required />
         <input type="text" name="interest" placeholder="Interests (e.g., Music, Dance)" onChange={handleChange} className="onboarding-input" required />
@@ -99,7 +139,6 @@ export default function LearnerOnboardingForm() {
 
         {error && <p className="onboarding-error">{error}</p>}
 
-        {/* 3. This button already had the correct className! No style prop needed. */}
         <button type="submit" className="get-started-btn" disabled={loading}>
           {loading ? 'Saving...' : 'Submit Profile'}
         </button>

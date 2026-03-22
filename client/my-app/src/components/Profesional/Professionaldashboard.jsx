@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ProfessionalDashboard.css";
 import "../../pages/Navigation.css";
 import axios from 'axios';
@@ -19,6 +19,31 @@ const ProfessionalDashboard = () => {
   const [content,setContent]=useState('');
   const [popup,setPopUpOpen]=useState(false)
   const [isOpen,setOpen]= useState(true);
+  const [notificationCount, setNotificationCount] = useState(0);
+  useEffect(() => {
+  fetchUnreadCount();
+  const interval = setInterval(() => {
+    fetchUnreadCount();
+  }, 1000); // 🔥 every 1 second
+
+  // cleanup (VERY IMPORTANT)
+  return () => clearInterval(interval);
+  }, []);
+
+    const fetchUnreadCount = async () => {
+        try {
+          const { UserId } = JSON.parse(localStorage.getItem("customer"));
+
+          const res = await axios.get(
+            `http://localhost:5004/getUnreadCount/${UserId}`
+          );
+
+          setNotificationCount(res.data.count);
+
+        } catch (error) {
+          console.log(error);
+        }
+      };
   const renderContent = () => {
     switch (activeTab) {
       case "overview":
@@ -65,10 +90,31 @@ const ProfessionalDashboard = () => {
                 <span className="icon"><FaRegEnvelope /></span>
                 {isOpen && <span className="text">Messages</span>}
               </div>
-              <div className="menu" onClick={() => setActiveTab("notifications")}>
+              {/* <div className="menu" onClick={() => setActiveTab("notifications")}>
                 <span className="icon"><FaRegBell/>
                 </span>
                 {isOpen && <span className="text">Notifications</span>}
+              </div> */}
+              <div
+                className={`menu ${activeTab === "notifications" ? "active" : ""}`}
+                onClick={() => setActiveTab("notifications")}
+              >
+                <span className="icon" style={{ position: "relative" }}>
+                  <FaRegBell />
+
+                  {/* 🔴 Badge */}
+                  {notificationCount > 0 && (
+                    <span className="notification-badge">
+                      {notificationCount}
+                    </span>
+                  )}
+                </span>
+
+                {isOpen && (
+                  <span className="text">
+                    Notifications
+                  </span>
+                )}
               </div>
             </div>
 
@@ -101,48 +147,3 @@ const ProfessionalDashboard = () => {
 };
 
 export default ProfessionalDashboard;
-
-
-
-
-
-  // return (
-  //   <><Navigationbar/>
-  //   <div className="dashboard-container">
-  //     {/* Top Profile Section */}
-  //     <div className="profile-header">
-  //       <div className="profile-left">
-  //           <div className="profile-pic">PIC</div>
-  //       </div>
-  //       <div className="profile-right">
-  //       <h2>Full Name</h2>
-  //       <p><strong>Connections:</strong> 120</p>
-  //       <p><strong>Rating:</strong> ⭐⭐⭐⭐☆</p>
-  //       <p className="bio">
-  //           Passionate music teacher with 10+ years of experience.
-  //       </p>
-  //       </div>
-  //     </div>
-  //     {/* Tabs */}
-  //     <div className="tabs">
-  //       <button onClick={() => setActiveTab("posts")} className={activeTab === "posts" ? "active" : ""}>
-  //         Posts
-  //       </button>
-  //       <button onClick={() => setActiveTab("courses")} className={activeTab === "courses" ? "active" : ""}>
-  //         Courses & Videos
-  //       </button>
-  //       <button onClick={() => setActiveTab("reviews")} className={activeTab === "reviews" ? "active" : ""}>
-  //         Reviews / Ratings
-  //       </button>
-  //       <button onClick={() => setActiveTab("book")} className={activeTab === "book" ? "active" : ""}>
-  //         Book Session
-  //       </button>
-  //     </div>
-
-  //     {/* Dynamic Content */}
-  //     <div className="tab-content">
-  //         {renderContent()}
-  //     </div>
-  //   </div>
-  //   </>
-  // );

@@ -1,13 +1,14 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
-import './Lprofile.css'; // Import CSS here
+import './Lprofile.css';
 
 function Lprofile() {
   const [data, setData] = useState({
+    fullname: "",      // 🔥 NEW
+    username: "",      // 🔥 NEW
     address: '',
     interest: '',
-    // experience: '',
     contact: '',
     district: '',
     city: '',
@@ -38,6 +39,7 @@ function Lprofile() {
       });
 
       const role = res.data.user.role;
+
       if (role === "Learner") {
         navigate('/learner-dashboard');
       } else {
@@ -54,16 +56,30 @@ function Lprofile() {
       <form onSubmit={handleSubmit} className="profile-form">
         <h2 className="form-title">Complete Your Profile</h2>
 
+        {/* 🔥 NEW INPUTS */}
+        <input
+          type="text"
+          name="fullname"
+          placeholder="Full Name"
+          onChange={handleChange}
+        />
+
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          onChange={handleChange}
+        />
+
         <input type="text" name="address" placeholder="Address" onChange={handleChange} />
         <input type="text" name="interest" placeholder="Interests" onChange={handleChange} />
-        {/* <input type="number" name="experience" placeholder="Experience (years)" onChange={handleChange} /> */}
         <input type="number" name="contact" placeholder="Phone Number" onChange={handleChange} />
         <input type="text" name="district" placeholder="District" onChange={handleChange} />
         <input type="text" name="city" placeholder="City" onChange={handleChange} />
         <input type="text" name="state" placeholder="State" onChange={handleChange} />
 
         <select name="country" onChange={handleChange}>
-          <option value="" disabled selected>Select Country</option>
+          <option value="" disabled>Select Country</option>
           {countries.map((country, idx) => (
             <option key={idx} value={country}>{country}</option>
           ))}

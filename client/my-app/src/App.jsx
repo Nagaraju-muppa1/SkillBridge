@@ -68,7 +68,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardRouter />} />
         <Route path="/professionaldashboard" element={<Professionaldashboard/>}/>
         <Route path="/navigationbar" element={<Navigationbar/>}></Route>
-        <Route path="/profile" element={<Profile/>}/>
+        <Route path="/profile/:id" element={<Profile />} />
         <Route path="learnerdashboard" element={<LearnerDashboard/>}/>
         {/* Add any other protected routes here */}
       </Route>
