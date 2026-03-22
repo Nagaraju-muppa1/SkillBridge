@@ -88,3 +88,13 @@
 .reject-btn:hover {
   background: #dc2626;
 }
+.disabled-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #6b7280;
+  color: #fff;
+  font-weight: bold;
+  cursor: not-allowed;
+}

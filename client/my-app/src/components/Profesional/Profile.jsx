@@ -279,6 +279,17 @@ function Profile() {
       console.log("Payload:", payload);
 
       await axios.post("http://localhost:5004/requestSlot", payload);
+      const data = {
+        receiverId: userId, 
+        senderId: UserId,   
+        senderName: learnerName,
+        recieverName: profName, 
+        title: "Demo Request",
+        message: `${learnerName} is requesting for a demo session`,
+        type: "REQUEST" 
+      };
+      const response = await axios.post('http://localhost:5004/saveNotification',data);
+      console.log(response);
 
       alert("Request sent successfully! ✅");
 
