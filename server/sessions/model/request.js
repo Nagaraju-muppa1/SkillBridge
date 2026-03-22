@@ -33,7 +33,7 @@ const requestSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Pending", "Accepted", "Rejected", "Completed"],
+      enum: ["Pending", "Accepted", "Rejected", "Completed","Cancelled"],
       default: "Pending",
     },
     description: {
@@ -41,12 +41,6 @@ const requestSchema = new mongoose.Schema(
     },
   },
   { timestamps: true }
-);
-
-// 🔥 Prevent double booking
-requestSchema.index(
-  { professionalId: 1, date: 1, startTime: 1 },
-  { unique: true }
 );
 
 module.exports = mongoose.model("Request", requestSchema);

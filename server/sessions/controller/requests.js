@@ -32,11 +32,13 @@ const requestSlot = async(req,res)=>{
 
 const updateStatus = async(req,res)=>{
     try{
-        const { status } = req.body;
+        const { status,description } = req.body;
         console.log(req.params.id);
         const updatedRequest = await requests.findByIdAndUpdate(
         req.params.id,
-        { Status: status },
+        { status: status,
+          description : description
+         },
         { new: true }
         );
 
