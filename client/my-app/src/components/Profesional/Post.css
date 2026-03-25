@@ -1,87 +1,188 @@
-
-
-.post-card {
-  width:600px;
-  background: #ffffff;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-  margin-left:120px;
-  margin-bottom: 16px;
-  padding: 12px 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
-}
-
-
-
-.post-media {
+/* ===== FEED BACKGROUND ===== */
+.feed-container {
   width: 100%;
-  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #0f172a;
+  min-height: 100vh;
+  padding-top: 20px;
 }
 
+/* ===== CREATE POST ===== */
+.create-post-box {
+  width: 600px;
+  background: #1e293b;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #334155;
+}
+
+.create-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.create-top button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 25px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: #94a3b8;
+  text-align: left;
+  cursor: pointer;
+}
+
+.create-top button:hover {
+  background: #1e293b;
+}
+
+/* ===== AVATAR ===== */
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: #0a66c2;
+  border-radius: 50%;
+}
+
+.avatar.small {
+  width: 35px;
+  height: 35px;
+}
+
+/* ===== POST CARD ===== */
+.post-card {
+  width: 600px;
+  background: #1e293b;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  margin-bottom: 16px;
+  padding: 12px;
+  color: #e2e8f0;
+}
+
+/* Header */
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.post-header h4 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.post-header span {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* Content */
+.post-card p {
+  margin: 10px 0;
+  font-size: 14px;
+  color: #e2e8f0;
+}
+
+/* Image */
 .post-media img {
   width: 100%;
-  max-height: 500px;
-  object-fit: cover;
-  border-radius: 4px;
+  border-radius: 8px;
+  margin-top: 10px;
 }
 
-
-
-.post-card p {
-  padding: 8px 16px;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #191919;
-  margin: 0;
-  white-space: pre-wrap;
-}
-
-
-
+/* ===== FOOTER ===== */
 .post-footer {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  border-top: 1px solid #f0f0f0;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
-/* Comments count */
-.post-comments {
-  font-size: 13px;
-  color: #666666;
-  cursor: pointer;
-}
-
-/* ===== Actions ===== */
-
+/* Buttons */
 .post-actions {
   display: flex;
-  gap: 6px;
+  gap: 10px;
+}
+
+.post-actions.right {
+  justify-content: flex-end;
 }
 
 .post-actions button {
-  background: transparent;
   border: none;
-  padding: 6px 12px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #0a66c2;
-  border-radius: 4px;
+  background: transparent;
   cursor: pointer;
-  transition: background 0.2s ease;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  color: #cbd5f5;
 }
 
 .post-actions button:hover {
-  background: #e8f3ff;
+  background: #334155;
 }
 
-/* Delete button subtle danger */
-.post-actions button:nth-child(2) {
-  color: #cc1016;
+/* Delete */
+.post-actions.right button:last-child {
+  color: #ef4444;
 }
 
-.post-actions button:nth-child(2):hover {
-  background: #fdecec;
+/* ===== NO POSTS ===== */
+.no-post {
+  color: #94a3b8;
+  margin-top: 20px;
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-box {
+  width: 400px;
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+}
+
+.modal-box textarea {
+  width: 100%;
+  height: 100px;
+  margin-top: 10px;
+  padding: 8px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  color: white;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.modal-actions button {
+  padding: 6px 12px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.modal-actions button:last-child {
+  background: #0a66c2;
+  color: white;
 }

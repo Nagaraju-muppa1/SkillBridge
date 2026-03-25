@@ -3,6 +3,9 @@ const postSchema =  mongoose.Schema({
     clerkUserId:{
        type:String
     },
+    UserId:{
+        type:String
+    },
     imageUrl:{type:String},
     content:{type:String}
 },{
