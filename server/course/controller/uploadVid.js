@@ -2,11 +2,16 @@ const courseSchema = require('../model/coursemodel.js');
 
 const upload = async(req,res)=>{
     try{
-        const {clerkUserId,videoUrl,description}=req.body;
+        const {clerkUserId,UserId,title,description,videoUrl,thumbnail,visibility,price}=req.body;
         const newData = new courseSchema({
             clerkUserId,
+            UserId,
+            title,
+            description,
             videoUrl,
-            description
+            thumbnail,
+            visibility,
+            price 
         })
         const response = newData.save();
         return res.status(200).json({

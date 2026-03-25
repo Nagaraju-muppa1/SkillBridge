@@ -1,10 +1,11 @@
 const postSchema = require('../models/postmodel');
 const create= async(req,res)=>{
      try{
-        const {clerkUserId,imageUrl,content}=req.body;
+        const {clerkUserId,UserId,imageUrl,content}=req.body;
         console.log(clerkUserId+" "+imageUrl+" "+content);
         const  newData = new postSchema({
             clerkUserId,
+            UserId,
             imageUrl,
             content
         })
