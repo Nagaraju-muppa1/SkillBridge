@@ -1,0 +1,86 @@
+.notifications-wrapper {
+  padding: 20px;
+  color: white;
+}
+
+/* 🔹 Top Card (like sessions tab box) */
+.notifications-top-card {
+  background: #0b0f14;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+/* 🔹 Tabs */
+.tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.tabs button {
+  padding: 10px 20px;
+  border: none;
+  background: #1a1f28;
+  color: #ccc;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.tabs button.active {
+  background: #3b82f6;
+  color: white;
+}
+
+/* 🔹 Content Card (big box like sessions) */
+.notifications-content-card {
+  background: #0b0f14;
+  border-radius: 12px;
+  padding: 20px;
+  min-height: 400px;
+}
+
+/* 🔹 Notification Item */
+.notification-item {
+  background: #1a1f28;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+/* 🔥 Unread highlight */
+.notification-item.unread {
+  border-left: 4px solid #3b82f6;
+}
+
+/* Read fade */
+.notification-item.read {
+  opacity: 0.7;
+}
+
+/* Header */
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Status */
+.status.unread {
+  color: #10b981;
+}
+
+.status.read {
+  color: gray;
+}
+
+/* Button */
+.notification-item button {
+  margin-top: 10px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #10b981;
+  color: white;
+  cursor: pointer;
+}
