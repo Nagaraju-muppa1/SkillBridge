@@ -55,7 +55,7 @@ const updateStatus = async(req,res)=>{
         })
     }
 }
-const fetchRequests = async(req,res)=>{
+const fetchRequestsForProfessional = async(req,res)=>{
     try{
         const professionalId = req.params.UserId;
         console.log(professionalId);
@@ -81,9 +81,35 @@ const fetchRequests = async(req,res)=>{
     }
 }
 
+const fetchRequestsForLearner = async(req,res)=>{
+    try{
+        const learnerId = req.params.UserId;
+        console.log(learnerId);
+        const data = await requests.find({learnerId:learnerId});
+        if(data == null){
+            return res.status(200).json({
+                success:false,
+                message:"UnSuccessfull"
+            })
+        }
+        console.log(data);
+        return res.status(200).json({
+            success:"true",
+            data: data
+        })
+
+    }catch(error){
+        console.log(error);
+        return res.status(404).json({
+            success:false,
+            message:"Fethching requests unsuccessful"
+        })
+    }
+}
 
 
-module.exports = {requestSlot,fetchRequests,updateStatus};
+
+module.exports = {requestSlot,fetchRequestsForProfessional,fetchRequestsForLearner ,updateStatus};
 
 
 

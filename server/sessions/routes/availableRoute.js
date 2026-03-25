@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const {slots,getSlots}= require("../controller/available");
-const {requestSlot,fetchRequests,updateStatus} = require("../controller/requests");
+const {requestSlot,fetchRequestsForProfessional,fetchRequestsForLearner,updateStatus} = require("../controller/requests");
 const {saveNotifications, markAsRead,getNotifications,getUnreadCount}= require("../controller/notifications");
 router.post("/saveSlots",slots);
 router.get("/getSlots/:UserId",getSlots);
 router.post('/requestSlot',requestSlot);
-router.get('/fetchRequests/:UserId',fetchRequests);
+router.get('/fetchRequests/:UserId',fetchRequestsForProfessional);
+router.get('/fetchlearnerRequests/:UserId',fetchRequestsForLearner);
 router.put('/updateRequestStatus/:id',updateStatus);
 router.post('/saveNotification',saveNotifications);
 router.get('/getNotifications/:userId',getNotifications);
