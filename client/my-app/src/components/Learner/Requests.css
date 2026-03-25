@@ -1,0 +1,100 @@
+.request-card {
+  background: #111827;
+  color: #fff;
+  border-radius: 14px;
+  padding: 18px;
+  margin: 15px 0;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  transition: 0.3s;
+}
+
+.request-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+/* Status Badge */
+.status {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status.pending {
+  background: #facc15;
+  color: #000;
+}
+
+.status.accepted {
+  background: #10b981;
+}
+
+.status.rejected {
+  background: #ef4444;
+}
+
+/* Body */
+.card-body {
+  margin-top: 10px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Buttons */
+.card-actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.accept-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #10b981;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.reject-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #ef4444;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.accept-btn:hover {
+  background: #059669;
+}
+
+.reject-btn:hover {
+  background: #dc2626;
+}
+.disabled-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #6b7280;
+  color: #fff;
+  font-weight: bold;
+  cursor: not-allowed;
+}

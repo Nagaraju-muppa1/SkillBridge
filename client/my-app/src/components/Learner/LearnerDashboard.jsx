@@ -1,139 +1,169 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./LearnerDb.css";
 import "../../pages/Navigation.css";
-import axios from 'axios';
-import Home from "./Home"
+import axios from "axios";
+
+import Home from "./Home";
 import Messages from "./MessagesL";
 import Courses from "./CoursesL";
-import Sessions from "./SessionsL"
+import Sessions from "./SessionsL";
 import Notifications from "./NotificationsL";
-import {  FaRegNewspaper,FaBookOpen, FaCalendarAlt,FaRegEnvelope,FaRegBell,FaSun, FaMoon,FaBars,FaThLarge,FaChartLine,FaTachometerAlt } from "react-icons/fa";
 
+import {
+  FaBookOpen,
+  FaCalendarAlt,
+  FaRegEnvelope,
+  FaRegBell,
+  FaSun,
+  FaMoon,
+  FaThLarge
+} from "react-icons/fa";
 
 const LearnerDashboard = () => {
-  const [activeTab, setActiveTab] = useState("overview");
-  const [theme,setTheme] = useState("dark");
-  const [isOpen,setOpen]= useState(true);
+  const [activeTab, setActiveTab] = useState("home");
+  const [theme, setTheme] = useState("dark");
+  const [isOpen, setOpen] = useState(true);
+
+  // 🔥 NEW STATE
+  const [notificationCount, setNotificationCount] = useState(0);
+
+  // 🔥 FETCH UNREAD COUNT
+  const fetchUnreadCount = async () => {
+    try {
+      const { UserId } = JSON.parse(localStorage.getItem("customer"));
+
+      const res = await axios.get(
+        `http://localhost:5004/getUnreadCount/${UserId}`
+      );
+
+      setNotificationCount(res.data.count || 0);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 🔥 CALL EVERY 1 SECOND
+  useEffect(() => {
+    fetchUnreadCount();
+
+    const interval = setInterval(() => {
+      fetchUnreadCount();
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const renderContent = () => {
     switch (activeTab) {
       case "home":
-        return <Home/>
+        return <Home />;
       case "courses":
-        return <Courses></Courses>;
+        return <Courses />;
       case "sessions":
-        return <Sessions/>;
+        return <Sessions />;
       case "messages":
-        return <Messages/>;
+        return <Messages />;
       case "notifications":
-        return <Notifications/>;
+        return <Notifications />;
       default:
         return null;
     }
   };
 
-  return(
+  return (
     <>
-        <div className={`dashboard-wrapper ${theme}`}>
+      <div className={`dashboard-wrapper ${theme}`}>
         <div className="dashboard">
-            <div className={`sidebar ${isOpen ? "open" : "close"}`}>
-              <button className="toggle" onClick={() => setOpen(!isOpen)} style={{ color: theme === "dark" ? "#fff" : "#000" }}>☰</button>
-              {isOpen && <span className="text">SkillBridge</span>}
-              <div className="menu" onClick={() => setActiveTab("home")}>
-                <span className="icon"><FaThLarge /></span>
-                {isOpen && <span  className="text">Home</span>}
-              </div>
-              
 
-              <div className="menu" onClick={() => setActiveTab("courses")}>
-                <span className="icon"><FaBookOpen /></span>
-                {isOpen && <span className="text">Courses</span>}
-              </div>
-              <div className="menu" onClick={() => setActiveTab("sessions")}>
-                <span className="icon"><FaCalendarAlt /></span>
-                {isOpen && <span className="text">Sessions</span>}
-              </div>
-              <div className="menu" onClick={() => setActiveTab("messages")}>
-                <span className="icon"><FaRegEnvelope /></span>
-                {isOpen && <span className="text">Messages</span>}
-              </div>
-              <div className="menu" onClick={() => setActiveTab("notifications")}>
-                <span className="icon"><FaRegBell/>
+          {/* 🔹 SIDEBAR */}
+          <div className={`sidebar ${isOpen ? "open" : "close"}`}>
+            
+            <button
+              className="toggle"
+              onClick={() => setOpen(!isOpen)}
+              style={{ color: theme === "dark" ? "#fff" : "#000" }}
+            >
+              ☰
+            </button>
+
+            {isOpen && <span className="text">SkillBridge</span>}
+
+            <div className="menu" onClick={() => setActiveTab("home")}>
+              <span className="icon"><FaThLarge /></span>
+              {isOpen && <span className="text">Home</span>}
+            </div>
+
+            <div className="menu" onClick={() => setActiveTab("courses")}>
+              <span className="icon"><FaBookOpen /></span>
+              {isOpen && <span className="text">Courses</span>}
+            </div>
+
+            <div className="menu" onClick={() => setActiveTab("sessions")}>
+              <span className="icon"><FaCalendarAlt /></span>
+              {isOpen && <span className="text">Sessions</span>}
+            </div>
+
+            <div className="menu" onClick={() => setActiveTab("messages")}>
+              <span className="icon"><FaRegEnvelope /></span>
+              {isOpen && <span className="text">Messages</span>}
+            </div>
+
+            {/* 🔔 NOTIFICATIONS WITH BADGE */}
+            <div className="menu" onClick={() => setActiveTab("notifications")}>
+              <span className="icon" style={{ position: "relative" }}>
+                <FaRegBell />
+
+                {/* 🔴 Badge */}
+                {notificationCount > 0 && (
+                  <span className="badge">
+                    {notificationCount}
+                  </span>
+                )}
+              </span>
+
+              {isOpen && (
+                <span className="text">
+                  Notifications
+                  {notificationCount > 0 && ` (${notificationCount})`}
                 </span>
-                {isOpen && <span className="text">Notifications</span>}
+              )}
+            </div>
+
+          </div>
+
+          {/* 🔹 MAIN */}
+          <div className={`main ${isOpen ? "open" : "close"}`}>
+
+            <div className="topbar">
+              <h3 className="title">Dashboard</h3>
+
+              <div className="topbar-center">
+                <input type="text" placeholder="Search..." className="search" />
+              </div>
+
+              <div className="topbar-right">
+                <span>🔔</span>
+                <span>👤</span>
+
+                <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+                  {theme === "dark" ? <FaMoon /> : <FaSun />}
+                </button>
               </div>
             </div>
 
-            <div className={`main ${isOpen ? "open" : "close"}`}>
-                <div className="topbar">
-                    <h3 className="title">Dashboard</h3>
-                    <div className="topbar-center">
-                      <input type="text" placeholder="Search..."className="search"/>
-                    </div>
-                    <div className="topbar-right">
-                      <span>🔔</span>
-                      <span>👤</span>
-                      <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
-                      {theme === "dark" ? <FaMoon/> : <FaSun/>}
-                    </button>
-                    </div>
-                
-                </div>
-                <div className="content">
-                  <div className="content-inner">
-                    {renderContent()}
-                  </div>
-                </div>
-
+            <div className="content">
+              <div className="content-inner">
+                {renderContent()}
+              </div>
             </div>
+
+          </div>
+
         </div>
-        </div>
+      </div>
     </>
-  )
+  );
 };
 
 export default LearnerDashboard;
-
-
-
-
-
-  // return (
-  //   <><Navigationbar/>
-  //   <div className="dashboard-container">
-  //     {/* Top Profile Section */}
-  //     <div className="profile-header">
-  //       <div className="profile-left">
-  //           <div className="profile-pic">PIC</div>
-  //       </div>
-  //       <div className="profile-right">
-  //       <h2>Full Name</h2>
-  //       <p><strong>Connections:</strong> 120</p>
-  //       <p><strong>Rating:</strong> ⭐⭐⭐⭐☆</p>
-  //       <p className="bio">
-  //           Passionate music teacher with 10+ years of experience.
-  //       </p>
-  //       </div>
-  //     </div>
-  //     {/* Tabs */}
-  //     <div className="tabs">
-  //       <button onClick={() => setActiveTab("posts")} className={activeTab === "posts" ? "active" : ""}>
-  //         Posts
-  //       </button>
-  //       <button onClick={() => setActiveTab("courses")} className={activeTab === "courses" ? "active" : ""}>
-  //         Courses & Videos
-  //       </button>
-  //       <button onClick={() => setActiveTab("reviews")} className={activeTab === "reviews" ? "active" : ""}>
-  //         Reviews / Ratings
-  //       </button>
-  //       <button onClick={() => setActiveTab("book")} className={activeTab === "book" ? "active" : ""}>
-  //         Book Session
-  //       </button>
-  //     </div>
-
-  //     {/* Dynamic Content */}
-  //     <div className="tab-content">
-  //         {renderContent()}
-  //     </div>
-  //   </div>
-  //   </>
-  // );

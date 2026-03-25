@@ -1,0 +1,183 @@
+/* 🔹 Layout */
+.home-container {
+  display: flex;
+  justify-content: center;
+}
+
+.home-wrapper {
+  width: 100%;
+  max-width: 900px;
+  background: linear-gradient(145deg, #0d1117, #111827);
+  border: 1px solid #30363d;
+  border-radius: 16px;
+  padding: 20px;
+  margin: 20px;
+}
+
+/* 🔹 Cards */
+.home-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.home-card {
+  display: flex;
+  gap: 18px;
+  padding: 22px;
+  background: #161b22;
+  border-radius: 14px;
+  border: 1px solid #30363d;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.home-card:hover {
+  transform: translateY(-4px);
+  border-color: #1f6feb;
+}
+
+.home-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.home-name {
+  font-size: 18px;
+  color: #e6edf3;
+  font-weight: 600;
+}
+
+.home-skill {
+  color: #58a6ff;
+}
+
+.home-meta {
+  color: #8b949e;
+  font-size: 14px;
+}
+
+.home-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.view-btn {
+  border: 1px solid #30363d;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: transparent;
+  color: white;
+}
+
+/* 🔹 PROFILE */
+.profile-view {
+  background: #161b22;
+  padding: 25px;
+  border-radius: 14px;
+}
+
+.profile-header {
+  display: flex;
+  gap: 20px;
+}
+
+.profile-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+}
+
+.profile-info h2 {
+  color: #e6edf3;
+}
+
+.profile-info p {
+  color: #8b949e;
+}
+
+.skill {
+  color: #58a6ff;
+}
+
+/* 🔹 Buttons */
+.btn {
+  margin-top: 15px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #1f6feb;
+  color: white;
+}
+
+.btn-back {
+  background: #30363d;
+  color: #c9d1d9;
+}
+
+/* 🔥 SLOT SECTION */
+.slot-section {
+  margin-top: 20px;
+  padding: 20px;
+  background: #0d1117;
+  border-radius: 12px;
+  border: 1px solid #30363d;
+}
+
+/* 📅 Date */
+.date-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.date-box label {
+  color: #8b949e;
+  margin-bottom: 5px;
+}
+
+.date-box input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #30363d;
+  background: #161b22;
+  color: white;
+}
+
+/* 🔹 Slots */
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.slot-card {
+  padding: 10px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.slot-card:hover {
+  border-color: #1f6feb;
+}
+
+.slot-card.selected {
+  background: #1f6feb;
+  color: white;
+}
+
+.no-slots {
+  color: #8b949e;
+}
+
+.full-btn {
+  width: 100%;
+  margin-top: 15px;
+}

@@ -113,7 +113,20 @@
   max-width: 1000px; 
 }
 
+.icon {
+  position: relative;
+}
 
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: red;
+  color: white;
+  font-size: 11px;
+  padding: 3px 6px;
+  border-radius: 50%;
+}
 
 .dashboard-wrapper.dark .sidebar { background: #0d1117; color: #c9d1d9; }
 .dashboard-wrapper.dark .sidebar .menu:hover { background: #161b22; }
