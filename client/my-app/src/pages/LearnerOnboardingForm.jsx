@@ -68,7 +68,7 @@ export default function LearnerOnboardingForm() {
         username: formData.username,
 
         address: formData.address,
-        interest: formData.interest,
+        skill: formData.interest,
         contact: formData.contact,
         district: formData.district,
         city: formData.city,

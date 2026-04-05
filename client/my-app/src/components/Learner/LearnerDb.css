@@ -88,6 +88,13 @@
   outline: none;
 }
 
+.filter-dropdown {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: white;
+}
 
 .topbar-right {
   display: flex;
