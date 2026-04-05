@@ -7,7 +7,8 @@ const postSchema =  mongoose.Schema({
         type:String
     },
     imageUrl:{type:String},
-    content:{type:String}
+    content:{type:String},
+    skill:{type:String}
 },{
      timestamps: true,
 })
