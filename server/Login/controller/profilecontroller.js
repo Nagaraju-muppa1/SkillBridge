@@ -53,9 +53,9 @@ const getDetails = async(req,res)=>{
   console.log("getdetails");
   try{
    
-    const clerkUserId = req.params.id;
-    console.log(clerkUserId);
-    const found = await userModel.findOne({clerkUserId:clerkUserId});
+    const UserId = req.params.id;
+    console.log(UserId);
+    const found = await userModel.findOne({UserId:UserId});
     console.log(found);
     if(!found){
        return res.status(201).json({

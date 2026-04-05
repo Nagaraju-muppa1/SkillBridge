@@ -86,10 +86,10 @@ const ProfessionalDashboard = () => {
                 <span className="icon"><FaCalendarAlt /></span>
                 {isOpen && <span className="text">Sessions</span>}
               </div>
-              <div className="menu" onClick={() => setActiveTab("messages")}>
+              {/* <div className="menu" onClick={() => setActiveTab("messages")}>
                 <span className="icon"><FaRegEnvelope /></span>
                 {isOpen && <span className="text">Messages</span>}
-              </div>
+              </div> */}
               {/* <div className="menu" onClick={() => setActiveTab("notifications")}>
                 <span className="icon"><FaRegBell/>
                 </span>

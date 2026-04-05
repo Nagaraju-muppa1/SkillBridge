@@ -7,6 +7,7 @@ function Posts() {
   const [popup, setPopUpOpen] = useState(false);
   const [content, setContent] = useState("");
   const [ProfessionaName, setPName] = useState("");
+  const [skill,setSName] = useState("");
 
   const { UserId, clerkUserId, role } = JSON.parse(
     localStorage.getItem("customer")
@@ -51,9 +52,10 @@ function Posts() {
         `http://localhost:5002/getPosts/${clerkUserId}`
       );
       setPosts(res.data.data);
-      const response = await axios.get(`http://localhost:5001/getName/${UserId}`)
-      console.log(response.data.message);
-      setPName(response.data.message);
+      const response = await axios.get(`http://localhost:5001/userdetails/${UserId}`)
+      console.log(response.data.message.fullname);
+      setPName(response.data.message.fullname);
+      setSName(response.data.message.skill);
     } catch (error) {
       console.log(error);
     }
@@ -84,6 +86,7 @@ function Posts() {
           UserId,
           imageUrl: response.data.secure_url,
           content,
+          skill
         };
 
         await axios.post("http://localhost:5002/create", newdata);
@@ -99,6 +102,7 @@ function Posts() {
           clerkUserId,
           UserId,
           content,
+          skill
         };
         await axios.post("http://localhost:5002/create", newdata);
         setPopUpOpen(false);
