@@ -72,7 +72,11 @@ const userSchema = mongoose.Schema({
     },
     bio:{
         type:String,
-    }
+    },
+  followers: {
+    type: [String],
+    default: []
+  }
 },
 {
   timestamps: true,

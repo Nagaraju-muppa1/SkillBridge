@@ -173,7 +173,7 @@ function Profile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(`http://localhost:5001/profile/${id}`);
+        const res = await axios.get(`http://localhost:5005/profile/${id}`);
         setUserId(res.data.data.UserId);
         setUser(res.data.data);
 
@@ -193,7 +193,7 @@ function Profile() {
 
   const fetchName = async (UserId) => { 
   try {
-     const response = await axios.get( `http://localhost:5001/getName/${UserId}` );
+     const response = await axios.get( `http://localhost:5005/getName/${UserId}` );
    return response.data.message; 
   } 
    catch (error) { 

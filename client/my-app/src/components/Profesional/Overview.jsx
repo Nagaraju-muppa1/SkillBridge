@@ -16,7 +16,7 @@ function Overview() {
       try {
         // ✅ Get Name
         const nameRes = await axios.get(
-          `http://localhost:5001/userdetails/${clerkUserId}`
+          `http://localhost:5005/userdetails/${clerkUserId}`
         );
         setName(nameRes.data.message.fullname);
 

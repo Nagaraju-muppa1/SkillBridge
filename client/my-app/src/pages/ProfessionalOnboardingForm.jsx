@@ -82,7 +82,7 @@ export default function ProfessionalOnboardingForm() {
       }
       console.log(newdata);
       // ---  API call logic ---
-      const response = await axios.put(`http://localhost:5001/user-service/profile`,newdata);
+      const response = await axios.put(`http://localhost:5005/user-service/profile`,newdata);
 
 
         console.log(response);

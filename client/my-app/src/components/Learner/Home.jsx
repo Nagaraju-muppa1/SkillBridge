@@ -37,7 +37,7 @@ function Home() {
   const fetchLearnerData = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5001/userdetails/${UserId}`
+        `http://localhost:5005/userdetails/${UserId}`
       );
 
       const user = res.data.message;
@@ -72,7 +72,7 @@ function Home() {
         filtered.map(async (post) => {
           try {
             const nameRes = await axios.get(
-              `http://localhost:5001/getName/${post.UserId}`
+              `http://localhost:5005/getName/${post.UserId}`
             );
 
             return {

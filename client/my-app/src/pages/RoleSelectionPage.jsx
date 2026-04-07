@@ -18,7 +18,7 @@ export default function RoleSelectionPage() {
     const timer = setTimeout(async () => {
       try {
         const clerkUserId = user.id;
-        const response = await axios.get(`http://localhost:5001/getRole/${clerkUserId}`);
+        const response = await axios.get(`http://localhost:5005/getRole/${clerkUserId}`);
         const data = {
              clerkUserId : response.data.clerkUserId,
              UserId : response.data.UserId,

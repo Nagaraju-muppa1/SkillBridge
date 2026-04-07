@@ -1,3 +1,3 @@
 module.exports = {
-    USER_SERVICE:"http://localhost:5001"
+    USER_SERVICE:"http://localhost:5005"
 };

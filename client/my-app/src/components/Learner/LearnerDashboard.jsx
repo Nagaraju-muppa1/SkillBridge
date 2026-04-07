@@ -27,6 +27,15 @@ const LearnerDashboard = () => {
   // 🔥 SEARCH STATES (NEW)
   const [searchText, setSearchText] = useState("");
   const [filterType, setFilterType] = useState("skill");
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [selectedProfessional, setSelectedProfessional] = useState(null);
+  const [demoVideos, setDemoVideos] = useState([]);
+  const [detailsLoading, setDetailsLoading] = useState(false);
+  const [connectLoading, setConnectLoading] = useState(false);
+  const [connections, setConnections] = useState([]);
+  const [connectionsLoading, setConnectionsLoading] = useState(false);
+  const [connectedProfessionalIds, setConnectedProfessionalIds] = useState([]);
 
   // 🔥 NOTIFICATION COUNT
   const [notificationCount, setNotificationCount] = useState(0);
@@ -55,6 +64,138 @@ const LearnerDashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const value = searchText.trim();
+
+    if (!value) {
+      setSearchResults([]);
+      setSearchLoading(false);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        setSearchLoading(true);
+        const res = await axios.get("http://localhost:5005/search", {
+          params: {
+            type: filterType,
+            query: value
+          }
+        });
+        setSearchResults(res.data?.data || []);
+      } catch (error) {
+        console.log(error);
+        setSearchResults([]);
+      } finally {
+        setSearchLoading(false);
+      }
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [searchText, filterType]);
+
+  useEffect(() => {
+    fetchConnections();
+  }, []);
+
+  const fetchConnections = async () => {
+    try {
+      const customer = JSON.parse(localStorage.getItem("customer"));
+      if (!customer?.UserId) return;
+      setConnectionsLoading(true);
+      const res = await axios.get(`http://localhost:5005/connections/${customer.UserId}`);
+      const list = res.data?.data || [];
+      setConnections(list);
+      setConnectedProfessionalIds(list.map((item) => item.UserId));
+    } catch (error) {
+      console.log(error);
+      setConnections([]);
+      setConnectedProfessionalIds([]);
+    } finally {
+      setConnectionsLoading(false);
+    }
+  };
+
+  const handleOpenProfessional = async (person) => {
+    try {
+      setDetailsLoading(true);
+      const [profileRes, courseRes] = await Promise.all([
+        axios.get(`http://localhost:5005/profile/${person._id}`),
+        axios.get(`http://localhost:5003/getCourses/${person.clerkUserId}`)
+      ]);
+
+      setSelectedProfessional(profileRes.data?.data || person);
+      setDemoVideos(courseRes.data?.data || []);
+    } catch (error) {
+      console.log(error);
+      setSelectedProfessional(person);
+      setDemoVideos([]);
+    } finally {
+      setDetailsLoading(false);
+    }
+  };
+
+  const handleConnect = async () => {
+    const customer = JSON.parse(localStorage.getItem("customer"));
+    if (!customer?.UserId || !selectedProfessional?.UserId) return;
+    if (connectedProfessionalIds.includes(selectedProfessional.UserId)) return;
+
+    try {
+      setConnectLoading(true);
+      // Optimistic UI update so button instantly turns Connected.
+      setConnectedProfessionalIds((prev) => [...prev, selectedProfessional.UserId]);
+      const res = await axios.post("http://localhost:5005/followProfessional", {
+        professionalId: selectedProfessional.UserId,
+        followerId: customer.UserId
+      });
+
+      const updatedFollowers = res.data?.followers || [];
+      setSelectedProfessional((prev) => ({
+        ...prev,
+        followers: updatedFollowers
+      }));
+      fetchConnections();
+    } catch (error) {
+      console.log(error);
+      setConnectedProfessionalIds((prev) =>
+        prev.filter((id) => id !== selectedProfessional.UserId)
+      );
+      alert("Unable to connect right now. Please try again.");
+    } finally {
+      setConnectLoading(false);
+    }
+  };
+
+  const handleDisconnect = async () => {
+    const customer = JSON.parse(localStorage.getItem("customer"));
+    if (!customer?.UserId || !selectedProfessional?.UserId) return;
+
+    try {
+      setConnectLoading(true);
+      setConnectedProfessionalIds((prev) =>
+        prev.filter((id) => id !== selectedProfessional.UserId)
+      );
+
+      const res = await axios.post("http://localhost:5005/unfollowProfessional", {
+        professionalId: selectedProfessional.UserId,
+        followerId: customer.UserId
+      });
+
+      const updatedFollowers = res.data?.followers || [];
+      setSelectedProfessional((prev) => ({
+        ...prev,
+        followers: updatedFollowers
+      }));
+      fetchConnections();
+    } catch (error) {
+      console.log(error);
+      setConnectedProfessionalIds((prev) => [...prev, selectedProfessional.UserId]);
+      alert("Unable to disconnect right now. Please try again.");
+    } finally {
+      setConnectLoading(false);
+    }
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case "home":
@@ -70,6 +211,25 @@ const LearnerDashboard = () => {
       default:
         return null;
     }
+  };
+
+  const customer = JSON.parse(localStorage.getItem("customer"));
+  const isConnected =
+    !!selectedProfessional?.UserId &&
+    (
+      connectedProfessionalIds.includes(selectedProfessional.UserId) ||
+      selectedProfessional?.followers?.includes(customer?.UserId)
+    );
+
+  const handleBookSession = () => {
+    if (!selectedProfessional) return;
+    const data = {
+      _id: selectedProfessional._id,
+      UserId: selectedProfessional.UserId,
+      fullname: selectedProfessional.fullname
+    };
+    localStorage.setItem("selectedProfessional", JSON.stringify(data));
+    setActiveTab("sessions");
   };
 
   return (
@@ -155,6 +315,9 @@ const LearnerDashboard = () => {
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
               />
+              <button className="connect-btn" onClick={fetchConnections}>
+                My Connections
+              </button>
 
             </div>
 
@@ -170,6 +333,114 @@ const LearnerDashboard = () => {
 
           <div className="content">
             <div className="content-inner">
+              {searchText.trim() && (
+                <div className="search-results-wrap">
+                  <h4 className="search-results-title">
+                    Professionals matching "{searchText.trim()}"
+                  </h4>
+
+                  {searchLoading ? (
+                    <p className="search-empty">Searching...</p>
+                  ) : searchResults.length === 0 ? (
+                    <p className="search-empty">No professional found.</p>
+                  ) : (
+                    <div className="search-card-grid">
+                      {searchResults.map((person) => (
+                        <div
+                          key={person._id}
+                          className="search-card clickable"
+                          onClick={() => handleOpenProfessional(person)}
+                        >
+                          <h5>{person.fullname || "Professional"}</h5>
+                          <p><strong>Skill:</strong> {person.skill || "N/A"}</p>
+                          <p><strong>Experience:</strong> {person.experience || 0} years</p>
+                          <p><strong>Location:</strong> {person.city || "N/A"}</p>
+                          <p>
+                            <strong>Status:</strong>{" "}
+                            {connectedProfessionalIds.includes(person.UserId) ? "Connected" : "Not connected"}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {selectedProfessional && (
+                <div className="search-results-wrap">
+                  <h4 className="search-results-title">Professional details</h4>
+                  {detailsLoading ? (
+                    <p className="search-empty">Loading details...</p>
+                  ) : (
+                    <>
+                      <div className="search-card">
+                        <h5>{selectedProfessional.fullname || "Professional"}</h5>
+                        <p><strong>Skill:</strong> {selectedProfessional.skill || "N/A"}</p>
+                        <p><strong>Experience:</strong> {selectedProfessional.experience || 0} years</p>
+                        <p><strong>Bio:</strong> {selectedProfessional.bio || "N/A"}</p>
+                        <p><strong>Followers:</strong> {selectedProfessional.followers?.length || 0}</p>
+                        <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+                        <button
+                          className="connect-btn"
+                          onClick={isConnected ? handleDisconnect : handleConnect}
+                          disabled={connectLoading}
+                        >
+                          {connectLoading ? "Please wait..." : isConnected ? "Disconnect" : "Connect"}
+                        </button>
+                        <button
+                          className="connect-btn"
+                          onClick={handleBookSession}
+                        >
+                          Book Session
+                        </button>
+                        </div>
+                      </div>
+
+                      <h5 className="search-results-title">Demo videos</h5>
+                      {demoVideos.length === 0 ? (
+                        <p className="search-empty">No demo videos uploaded yet.</p>
+                      ) : (
+                        <div className="search-card-grid">
+                          {demoVideos.map((video) => (
+                            <div key={video._id} className="search-card">
+                              <h5>{video.title || "Demo Video"}</h5>
+                              <video className="demo-video" controls>
+                                <source src={video.videoUrl} type="video/mp4" />
+                              </video>
+                              <p>{video.description || "No description available."}</p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
+
+              {connectionsLoading && (
+                <div className="search-results-wrap">
+                  <p className="search-empty">Loading your connections...</p>
+                </div>
+              )}
+
+              {!connectionsLoading && connections.length > 0 && (
+                <div className="search-results-wrap">
+                  <h4 className="search-results-title">My Connections</h4>
+                  <div className="search-card-grid">
+                    {connections.map((person) => (
+                      <div
+                        key={person._id}
+                        className="search-card clickable"
+                        onClick={() => handleOpenProfessional(person)}
+                      >
+                        <h5>{person.fullname || "Professional"}</h5>
+                        <p><strong>Skill:</strong> {person.skill || "N/A"}</p>
+                        <p><strong>Followers:</strong> {person.followers?.length || 0}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               {renderContent()}
             </div>
           </div>

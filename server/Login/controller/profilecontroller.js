@@ -154,10 +154,22 @@ const getRole = async(req,res)=>{
 }
 const getProfessional = async(req,res)=>{
   try{
-      const {skill}= req.query;
-      const details = await userModel.find({
-      skill: { $regex: skill, $options: "i" } 
-    });
+      const { skill = "", name = "", type = "skill", query = "" } = req.query;
+      const searchValue = String(query || (type === "name" ? name : skill)).trim();
+      const searchField = type === "name" ? "fullname" : "skill";
+
+      const filter = {
+        $or: [
+          { role: "professional" },
+          { UserId: { $regex: "^PF", $options: "i" } }
+        ]
+      };
+
+      if (searchValue) {
+        filter[searchField] = { $regex: searchValue, $options: "i" };
+      }
+
+      const details = await userModel.find(filter);
 
     if (details.length === 0) {
       return res.status(200).json({
@@ -204,4 +216,102 @@ const profile = async(req,res)=>{
     });
 }
 }
-module.exports = { saveProfile,profileEdit,getDetails,getRole,getProfessional,profile, getName};
+
+const followProfessional = async (req, res) => {
+  try {
+    const { professionalId, followerId } = req.body;
+
+    if (!professionalId || !followerId) {
+      return res.status(400).json({
+        success: false,
+        message: "professionalId and followerId are required"
+      });
+    }
+
+    const professional = await userModel.findOne({ UserId: professionalId });
+    if (!professional) {
+      return res.status(404).json({
+        success: false,
+        message: "Professional not found"
+      });
+    }
+
+    if (!professional.followers.includes(followerId)) {
+      professional.followers.push(followerId);
+      await professional.save();
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Connected successfully",
+      followersCount: professional.followers.length,
+      followers: professional.followers
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Error while connecting"
+    });
+  }
+};
+
+const unfollowProfessional = async (req, res) => {
+  try {
+    const { professionalId, followerId } = req.body;
+
+    if (!professionalId || !followerId) {
+      return res.status(400).json({
+        success: false,
+        message: "professionalId and followerId are required"
+      });
+    }
+
+    const professional = await userModel.findOne({ UserId: professionalId });
+    if (!professional) {
+      return res.status(404).json({
+        success: false,
+        message: "Professional not found"
+      });
+    }
+
+    professional.followers = (professional.followers || []).filter(
+      (id) => id !== followerId
+    );
+    await professional.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Disconnected successfully",
+      followersCount: professional.followers.length,
+      followers: professional.followers
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Error while disconnecting"
+    });
+  }
+};
+const getConnections = async (req, res) => {
+  try {
+    const learnerId = req.params.learnerId;
+    const data = await userModel.find({
+      role: "professional",
+      followers: learnerId
+    });
+
+    return res.status(200).json({
+      success: true,
+      data
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Error while fetching connections"
+    });
+  }
+};
+module.exports = { saveProfile,profileEdit,getDetails,getRole,getProfessional,profile, getName, followProfessional, unfollowProfessional, getConnections};
